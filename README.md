@@ -92,26 +92,47 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 ## Single-methylome analyses
 # scatter.py
 **Usage:**
+```
+```
 **Example:**
+```
+```
 # rankscatter.py
 **Usage:**
+```
+```
 **Example:**
-
+```
+```
 # grouping.py
 **Usage:**
+```
+```
 **Example:**
-
+```
+```
 # metaplot.py
 **Usage:**
+```
+```
 **Example:**
-
+```
+```
 ## Multiple-methylome analyses
 # comparison.py -p scatter
 **Usage:**
+```
+```
 **Example:**
+```
+```
 # comparison.py -p heatmap
 **Usage:**
+```
+```
 **Example:**
+```
+```
 
 
 
