@@ -4,7 +4,8 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 
 # Contents
-Single-methylome analyses:
+[System requirement](#-System-requirement)
+[Single-methylome analyses]()
   - Correlation analyses of genome-wide DNA methylation and gene expression
   - Ordinal association analyses with genes ranked by gene expression level
   - Distribution of DNA methylation by groups of genes with different expression level
@@ -15,6 +16,7 @@ Multiple-methylome analyses:
   - Gene level association between changes of DNA methylation and changes of gene expression
   - Heatmap representation of DNA methylation and gene expression data together
  
+
 # System requirement 
 * Linux environment
 * CPU：No special restrictions, but CPU has 16 cores is more efficient
@@ -25,6 +27,7 @@ Multiple-methylome analyses:
 * Python 2.7 
 (Type " python -V" to see the installed version. Python2 could be downloaded from  http://www.python.org/download/) 
 * [CGmaptools](https://cgmaptools.github.io/quick-start/)
+* [ucsc-gtftogenepred](https://bioconda.github.io/recipes/ucsc-gtftogenepred/README.html)
 
 Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed. To install the packages, use the following commands on linux terminal:
 ```
@@ -55,7 +58,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 
 # Running MethGET
 ## Data Preprocessing
-# preprocess.py
+#### preprocess.py
 Use the script preprocess.py to preprocess the data for downstream analyses
 **Usage:**
 preprocess.py {-s <samplelist> | -n <samplename> -f <cgmap> -e <expressionfile>} -g <gtf> [options]
@@ -90,28 +93,32 @@ python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
 python preprocess.py -s samplelist.txt -g genes.gtf
 ```
 ## Single-methylome analyses
-# scatter.py
+#### Correlation analyses of genome-wide DNA methylation and gene expression
+#### scatter.py
 **Usage:**
 ```
 ```
 **Example:**
 ```
 ```
-# rankscatter.py
+#### Ordinal association analyses with genes ranked by gene expression level
+#### rankscatter.py
 **Usage:**
 ```
 ```
 **Example:**
 ```
 ```
-# grouping.py
+#### Distribution of DNA methylation by groups of genes with different expression level
+#### grouping.py
 **Usage:**
 ```
 ```
 **Example:**
 ```
 ```
-# metaplot.py
+#### Average methylation level profiles with different expression groups around genes
+#### metaplot.py
 **Usage:**
 ```
 ```
@@ -119,14 +126,16 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 ```
 ```
 ## Multiple-methylome analyses
-# comparison.py -p scatter
+#### Gene level association between changes of DNA methylation and changes of gene expression
+#### comparison.py -p scatter
 **Usage:**
 ```
 ```
 **Example:**
 ```
 ```
-# comparison.py -p heatmap
+#### Heatmap representation of DNA methylation and gene expression data together
+#### comparison.py -p heatmap
 **Usage:**
 ```
 ```
