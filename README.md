@@ -4,7 +4,7 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 
 # Contents
-[System requirement](#-System-requirement)
+[System Requirements](#SystemRequirements)
 [Single-methylome analyses]()
   - Correlation analyses of genome-wide DNA methylation and gene expression
   - Ordinal association analyses with genes ranked by gene expression level
@@ -17,7 +17,7 @@ Multiple-methylome analyses:
   - Heatmap representation of DNA methylation and gene expression data together
  
 
-# System requirement 
+# <a name="SystemRequirements"></a>System Requirements
 * Linux environment
 * CPU：No special restrictions, but CPU has 16 cores is more efficient
 
