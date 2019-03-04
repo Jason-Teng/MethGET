@@ -5,6 +5,7 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 # Contents
 [System Requirements](#SystemRequirements)
+[Installation](#Installation)
 [Single-methylome analyses]()
   - Correlation analyses of genome-wide DNA methylation and gene expression
   - Ordinal association analyses with genes ranked by gene expression level
@@ -39,7 +40,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install argparse
 	$ pip install pyBigWig
 ```
-# Installation
+# <a name="Installation"></a>Installation
 
 # MethGET Input
 * For single methylome
