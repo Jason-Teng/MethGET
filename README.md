@@ -243,6 +243,58 @@ Graphing arguments:
 #### grouping.py
 **Usage:**
 ```
+usage:  [-h] [-n SAMPLENAME] [-p {boxplot,violinplot}] [-c {CG,CHG,CHH}]
+        [-t {Gene_Body,Promoter,Exon,Intron}] [-nb NUMBEROFGROUP]
+        [-re0 {True,False}] [-cor {False,pearson,spearman}]
+        [-mean {True,False}] [-sf {True,False}] [-ylim YLIMIT]
+        [--dotsize DOTSIZE] [--textsize TEXTSIZE] [--ticksize TICKSIZE]
+        [--labelsize LABELSIZE] [--titlesize TITLESIZE]
+        [--legendsize LEGENDSIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Required arguments:
+  -n SAMPLENAME, --samplename SAMPLENAME
+                        The name of the set of data
+  -p {boxplot,violinplot}, --plot {boxplot,violinplot}
+                        Create boxplot or violinplot, default is boxplot
+  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
+                        Choose the context of methylation
+  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
+                        Choose the target region of methylation
+  -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
+                        Define how many group to seperate gene expression,
+                        default is 5
+
+Important general arguments:
+  -re0 {True,False}, --skip0 {True,False}
+                        Whether genes with 0 expression value would be
+                        included. Default is to include them
+  -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
+                        select the type of correlation in the table
+
+Chart visulaization arguments:
+  -mean {True,False}, --showmeans {True,False}
+                        whether to show the position of mean in boxplot or
+                        violin plot, default is to show
+  -sf {True,False}, --showfliers {True,False}
+                        remove the outliers in the boxplots
+  -ylim YLIMIT, --ylimit YLIMIT
+                        Nemeric value. Optional. zoom in the DNA methylation
+                        level to clearly understand the methylation
+                        distribution
+
+Graphing arguments:
+  --dotsize DOTSIZE     dotsize
+  --textsize TEXTSIZE   textsize
+  --ticksize TICKSIZE   ticksize
+  --labelsize LABELSIZE
+                        labelsize
+  --titlesize TITLESIZE
+                        titlesize
+  --legendsize LEGENDSIZE
+                        legendsize
 ```
 **Example:**
 ```
@@ -251,6 +303,43 @@ Graphing arguments:
 #### metaplot.py
 **Usage:**
 ```
+usage:  [-h] [-n SAMPLENAME] [-p {region,point}] [-ma METAVALUEFILE]
+        [-nb NUMBEROFGROUP] [-re0 {True,False}] [-No_bins NUMBEROFBINS]
+        [-yaxis {auto,set100}] [-xtick XTICKSIZE] [-ytick YTICKSIZE]
+        [-label LABELSIZE] [-title TITLESIZE] [-legend LEGENDSIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p {region,point}, --plot {region,point}
+                        choose the format of the metaplot, default is 'region'
+  -ma METAVALUEFILE, --metavaluefile METAVALUEFILE
+                        put in the metaplot value file if you have created,
+                        default is False
+  -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
+                        define how many group to seperate gene expression,
+                        default is 5
+  -re0 {True,False}, --remove0RPKM {True,False}
+                        remove genes that their expression value is equal to 0
+  -No_bins NUMBEROFBINS, --numberofbins NUMBEROFBINS
+                        define the total of bins from upstream to downstream
+  -yaxis {auto,set100}, --yaxissetting {auto,set100}
+                        choose if the ticks of yaxis set on 100
+
+Required arguments:
+  -n SAMPLENAME, --samplename SAMPLENAME
+                        The name of the set of data
+
+Graphing arguments:
+  -xtick XTICKSIZE, --xticksize XTICKSIZE
+                        the size of the xticks (upstream, gene, downstream)
+  -ytick YTICKSIZE, --yticksize YTICKSIZE
+                        the size of the yticks (methylation level)
+  -label LABELSIZE, --labelsize LABELSIZE
+                        labelsize
+  -title TITLESIZE, --titlesize TITLESIZE
+                        titlesize
+  -legend LEGENDSIZE, --legendsize LEGENDSIZE
+                        legendsize
 ```
 **Example:**
 ```
@@ -260,6 +349,49 @@ Graphing arguments:
 #### comparison.py -p scatter
 **Usage:**
 ```
+usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
+        [-t {Gene_Body,Promoter,Exon,Intron}] [-mthr METHTHRESHOLD]
+        [-ethr EXPTHRESHOLD] [-ad ADDGEVALUE] [-list {True,False}]
+        [-cor {False,pearson,spearman}] [--dotsize DOTSIZE]
+        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
+        [--fontsize FONTSIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SAMPLELIST, --samplelist SAMPLELIST
+                        put in the sample description file
+  -p {scatter,heatmap}, --plot {scatter,heatmap}
+                        create scatterplot or heatmap
+  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
+                        choose the context of methylation
+  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
+                        choose the target region of methylation
+  -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
+                        set threshold to identify the differential methylated
+                        genes
+  -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
+                        set threshold to identify genes that have expression
+                        change
+  -ad ADDGEVALUE, --addGEvalue ADDGEVALUE
+                        add a small value on gene expression value to
+                        calculate the log(fold change)
+  -list {True,False}, --genelist {True,False}
+                        create table to show information of the genes selected
+  -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
+                        select the type of correlation, default is 'pearson'
+
+Graphing arguments:
+  --dotsize DOTSIZE     dotsize
+  --textsize TEXTSIZE   textsize
+  --ticksize TICKSIZE   ticksize
+  --labelsize LABELSIZE
+                        labelsize
+  --titlesize TITLESIZE
+                        titlesize
+  --legendsize LEGENDSIZE
+                        legendsize
+  --fontsize FONTSIZE   fontsize
 ```
 **Example:**
 ```
@@ -268,6 +400,49 @@ Graphing arguments:
 #### comparison.py -p heatmap
 **Usage:**
 ```
+usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
+        [-t {Gene_Body,Promoter,Exon,Intron}] [-mthr METHTHRESHOLD]
+        [-ethr EXPTHRESHOLD] [-ad ADDGEVALUE] [-list {True,False}]
+        [-cor {False,pearson,spearman}] [--dotsize DOTSIZE]
+        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
+        [--fontsize FONTSIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SAMPLELIST, --samplelist SAMPLELIST
+                        put in the sample description file
+  -p {scatter,heatmap}, --plot {scatter,heatmap}
+                        create scatterplot or heatmap
+  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
+                        choose the context of methylation
+  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
+                        choose the target region of methylation
+  -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
+                        set threshold to identify the differential methylated
+                        genes
+  -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
+                        set threshold to identify genes that have expression
+                        change
+  -ad ADDGEVALUE, --addGEvalue ADDGEVALUE
+                        add a small value on gene expression value to
+                        calculate the log(fold change)
+  -list {True,False}, --genelist {True,False}
+                        create table to show information of the genes selected
+  -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
+                        select the type of correlation, default is 'pearson'
+
+Graphing arguments:
+  --dotsize DOTSIZE     dotsize
+  --textsize TEXTSIZE   textsize
+  --ticksize TICKSIZE   ticksize
+  --labelsize LABELSIZE
+                        labelsize
+  --titlesize TITLESIZE
+                        titlesize
+  --legendsize LEGENDSIZE
+                        legendsize
+  --fontsize FONTSIZE   fontsize
 ```
 **Example:**
 ```
