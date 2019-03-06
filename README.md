@@ -4,24 +4,24 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 
 # Contents
-[System Requirements](#SystemRequirements)
+## [System Requirements](#SystemRequirements)
 
-[Installation](#Installation)
+## [Installation](#Installation)
 
-[MethGET Input](#MethGETInput)
+## [MethGET Input](#MethGETInput)
 
-[Running MethGET](#RunningMethGET)
+## [Running MethGET](#RunningMethGET)
 
-[Data Preprocessing](#DataPreprocessing)
+### [Data Preprocessing](#DataPreprocessing)
 
-[Single-methylome analyses](#Singlemeth):
+### [Single-methylome analyses](#Singlemeth):
   - [Correlation analyses of genome-wide DNA methylation and gene expression](#scatter)
   - [Ordinal association analyses with genes ranked by gene expression level](#rankscatter)
   - [Distribution of DNA methylation by groups of genes with different expression level](#boxplot)
   - [Average methylation level profiles with different expression groups around genes](#metaplot)
  
 
-[Multiple-methylome analyses](#Multiplemeth):
+### [Multiple-methylome analyses](#Multiplemeth):
   - [Gene level association between changes of DNA methylation and changes of gene expression](#deltascatter)
   - [Heatmap representation of DNA methylation and gene expression data together](#heatmap)
  
