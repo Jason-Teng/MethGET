@@ -89,8 +89,9 @@ MT_B    MT_B_CGmap.gz   MT_B_exp.txt    MT
 Use the script preprocess.py to preprocess the data for downstream analyses
 
 **Usage:**
+```bash
 preprocess.py {-s <samplelist> | -n <samplename> -f <cgmap> -e <expressionfile>} -g <gtf> [options]
-```
+
 optional arguments:
   -h, --help            show this help message and exit
 
