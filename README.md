@@ -5,7 +5,9 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 # Contents
 [System Requirements](#SystemRequirements)
+
 [Installation](#Installation)
+
 [Single-methylome analyses]()
   - Correlation analyses of genome-wide DNA methylation and gene expression
   - Ordinal association analyses with genes ranked by gene expression level
@@ -20,10 +22,6 @@ Multiple-methylome analyses:
 
 # <a name="SystemRequirements"></a>System Requirements
 * Linux environment
-* CPU：No special restrictions, but CPU has 16 cores is more efficient
-
-* MEM：12GB or higer (for plant sample) / 256GB or higher (for human sample)
-* GCC 5.4.0 +
 
 * Python 2.7 
 (Type " python -V" to see the installed version. Python2 could be downloaded from  http://www.python.org/download/) 
