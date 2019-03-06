@@ -8,23 +8,26 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 
 [Installation](#Installation)
 
-[Single-methylome analyses]()
-  - Correlation analyses of genome-wide DNA methylation and gene expression
-  - Ordinal association analyses with genes ranked by gene expression level
-  - Distribution of DNA methylation by groups of genes with different expression level
-  - Average methylation level profiles with different expression groups around genes
+[MethGET Input](#MethGETInput)
+
+
+[Single-methylome analyses](#Singlemeth):
+  - [Correlation analyses of genome-wide DNA methylation and gene expression](#scatter)
+  - [Ordinal association analyses with genes ranked by gene expression level](#rankscatter)
+  - [Distribution of DNA methylation by groups of genes with different expression level](#boxplot)
+  - [Average methylation level profiles with different expression groups around genes](#metaplot)
  
 
-Multiple-methylome analyses:
-  - Gene level association between changes of DNA methylation and changes of gene expression
-  - Heatmap representation of DNA methylation and gene expression data together
+[Multiple-methylome analyses](#Multiplemeth):
+  - [Gene level association between changes of DNA methylation and changes of gene expression](#deltascatter)
+  - [Heatmap representation of DNA methylation and gene expression data together](#heatmap)
  
 
 # <a name="SystemRequirements"></a>System Requirements
 * Linux environment
 
 * Python 2.7 
-(Type " python -V" to see the installed version. Python2 could be downloaded from  http://www.python.org/download/) 
+(Type " python -V" to see the installed version. Python2.7 could be downloaded from  http://www.python.org/download/) 
 * [CGmaptools](https://cgmaptools.github.io/quick-start/)
 * [ucsc-gtftogenepred](https://bioconda.github.io/recipes/ucsc-gtftogenepred/README.html)
 
@@ -40,7 +43,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 ```
 # <a name="Installation"></a>Installation
 
-# MethGET Input
+# <a name="MethGETInput"></a>MethGET Input
 * For single methylome
 > 1. DNA Methylatioin
 >>  CGmap.gz file
