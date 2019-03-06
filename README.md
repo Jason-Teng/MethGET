@@ -62,7 +62,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 >> GTF file
 
 # <a name="RunningMethGET"></a>Running MethGET
-## <a name="#DataPreprocessing"></a>Data Preprocessing
+## <a name="DataPreprocessing"></a>Data Preprocessing
 #### preprocess.py
 Use the script preprocess.py to preprocess the data for downstream analyses
 **Usage:**
@@ -97,8 +97,8 @@ python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
 # for samplelist
 python preprocess.py -s samplelist.txt -g genes.gtf
 ```
-## <a name="##Singlemeth"></a>Single-methylome analyses
-#### <a name="#scatter"></a>Correlation analyses of genome-wide DNA methylation and gene expression
+## <a name="Singlemeth"></a>Single-methylome analyses
+#### <a name="scatter"></a>Correlation analyses of genome-wide DNA methylation and gene expression
 #### scatter.py
 **Usage:**
 ```
@@ -106,7 +106,7 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 **Example:**
 ```
 ```
-#### <a name="##rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
+#### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
 #### rankscatter.py
 **Usage:**
 ```
@@ -114,7 +114,7 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 **Example:**
 ```
 ```
-#### <a name="#boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
+#### <a name="boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
 #### grouping.py
 **Usage:**
 ```
@@ -122,7 +122,7 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 **Example:**
 ```
 ```
-#### <a name="#metaplot"></a>Average methylation level profiles with different expression groups around genes
+#### <a name="metaplot"></a>Average methylation level profiles with different expression groups around genes
 #### metaplot.py
 **Usage:**
 ```
@@ -130,8 +130,8 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 **Example:**
 ```
 ```
-## <a name="#Multiplemeth"></a>Multiple-methylome analyses
-#### <a name="#deltascatter"></a>Gene level association between changes of DNA methylation and changes of gene expression
+## <a name="Multiplemeth"></a>Multiple-methylome analyses
+#### <a name="deltascatter"></a>Gene level association between changes of DNA methylation and changes of gene expression
 #### comparison.py -p scatter
 **Usage:**
 ```
@@ -139,7 +139,7 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 **Example:**
 ```
 ```
-#### <a name="#heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
+#### <a name="heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
 #### comparison.py -p heatmap
 **Usage:**
 ```
