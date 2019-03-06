@@ -48,23 +48,46 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 
 # <a name="MethGETInput"></a>MethGET Input
 * For single methylome
-> 1. DNA Methylatioin
+> 1. DNA Methylation
 >>  CGmap.gz file
+```
+chr1    G       13538   CG      CG      0.6     6       10
+chr1    G       13539   CHG     CC      0.0     0       9
+chr1    G       13541   CHH     CA      0.0     0       9
+chr1    G       13545   CHH     CA      0.0     0       8
+```
 > 2. Gene Expression File
->> tab-delimited text ﬁle
+>> Tab-delimited text ﬁle
+```
+AT1G01310       0.152868
+AT1G01320       9.06088
+AT1G01340       14.1157
+AT1G01350       24.8099
+AT1G01355       0.082233
+AT1G01360       42.5391
+AT1G01370       8.28111
+```
 > 3. Gene Annotation File
->> GTF file 
+>> gene annotation in GTF file 
 
 * For multiple methylomes 
 >1. Sample Description File 
->> sample list
+>> Sample list
+```
+WT_A    WT_A_CGmap.gz   WT_A_exp.txt    WT
+WT_B    WT_B_CGmap.gz   WT_B_exp.txt    WT
+MT_A    MT_A_CGmap.gz   MT_A_exp.txt    MT
+MT_B    MT_B_CGmap.gz   MT_B_exp.txt    MT
+```
 >2. Gene Annotation File
->> GTF file
+>> gene annotation in GTF file
 
-# <a name="RunningMethGET"></a>Running MethGET
+
+# <a name="RunningMethGET"></a>Running MethGET 
 ## <a name="DataPreprocessing"></a>Data Preprocessing
 #### preprocess.py
 Use the script preprocess.py to preprocess the data for downstream analyses
+
 **Usage:**
 preprocess.py {-s <samplelist> | -n <samplename> -f <cgmap> -e <expressionfile>} -g <gtf> [options]
 ```
@@ -102,6 +125,52 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 #### scatter.py
 **Usage:**
 ```
+usage:  [-h] [-n SAMPLENAME] [-p {scatter,kernel}] [-c {CG,CHG,CHH}]
+        [-t {Promoter,Gene_Body,Exon,Intron}] [-cor {False,pearson,spearman}]
+        [-re0 {True,False}] [-thrs THRESHOLD] [-xlim XLIMIT] [-ylim YLIMIT]
+        [--dotsize DOTSIZE] [--textsize TEXTSIZE] [--ticksize TICKSIZE]
+        [--labelsize LABELSIZE] [--titlesize TITLESIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Required arguments:
+  -n SAMPLENAME, --samplename SAMPLENAME
+                        the name of the set of data
+  -p {scatter,kernel}, --plot {scatter,kernel}
+                        create scatterplot or kernel density plot, default is
+                        'scatterplot'
+  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
+                        choose the context of methylation, default is CG
+  -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
+                        choose the target region of methylation, default is
+                        'Promoter'
+
+Important general arguments:
+  -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
+                        select the type of correlation, default is pearson
+  -re0 {True,False}, --skip0 {True,False}
+                        Whether genes with 0 expression value would be
+                        included. Default is to include them
+  -thrs THRESHOLD, --threshold THRESHOLD
+                        Whether skip genes with expression value that is too
+                        high, default is to skip genes higher than 1000
+                        expression. If want to include them, please set 'None'
+  -xlim XLIMIT, --xlimit XLIMIT
+                        Nemeric zoom in the gene expression value to clearly
+                        understand the distribution
+  -ylim YLIMIT, --ylimit YLIMIT
+                        Nemeric zoom in the DNA methylation level to clearly
+                        understand the distribution
+
+Graphing arguments:
+  --dotsize DOTSIZE     dotsize, default is 30
+  --textsize TEXTSIZE   textsize, default is 20
+  --ticksize TICKSIZE   ticksize, default is 15
+  --labelsize LABELSIZE
+                        labelsize, default is 20
+  --titlesize TITLESIZE
+                        titlesize, default is 20
 ```
 **Example:**
 ```
@@ -110,6 +179,61 @@ python preprocess.py -s samplelist.txt -g genes.gtf
 #### rankscatter.py
 **Usage:**
 ```
+usage:  [-h] [-n SAMPLENAME] [-p {scatter,kernel}] [-c {CG,CHG,CHH}]
+        [-t {Gene_Body,Promoter,Exon,Intron}] [-re0 {True,False}]
+        [-thrs THRESHOLD] [-shsca {True,False}] [-line {True,False}]
+        [-smoo SMOOTH_N] [-ylim YLIMIT] [--dotsize DOTSIZE]
+        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Required arguments:
+  -n SAMPLENAME, --samplename SAMPLENAME
+                        the name of the set of data
+  -p {scatter,kernel}, --plot {scatter,kernel}
+                        create scatterplot or kernel density plot, default is
+                        'scatterplot'
+  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
+                        choose the context of methylation, default is 'CG'
+  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
+                        choose the target region of methylation, default is
+                        'Promoter'
+
+Important general arguments:
+  -re0 {True,False}, --skip0 {True,False}
+                        Whether genes with 0 expression value would be
+                        included. Default is to include them
+  -thrs THRESHOLD, --threshold THRESHOLD
+                        Whether to skip genes with expression value that is
+                        too high, default is to skip genes higher than 1000
+                        expression. If want to include them, please set 'None'
+
+chart visulaization arguments:
+  -shsca {True,False}, --showscatterplot {True,False}
+                        whether to show the scatterplot or not, default is to
+                        show
+  -line {True,False}, --smoothline {True,False}
+                        whether to show the fitting curve of methylation and
+                        gene expression, default is to show
+  -smoo SMOOTH_N, --smooth_N SMOOTH_N
+                        set the number of ticks to average when drawing the
+                        fitting curve, default is 500
+  -ylim YLIMIT, --ylimit YLIMIT
+                        Nemeric zoom in the DNA methylation level to clearly
+                        understand the distribution
+
+Graphing arguments:
+  --dotsize DOTSIZE     dotsize
+  --textsize TEXTSIZE   textsize
+  --ticksize TICKSIZE   ticksize
+  --labelsize LABELSIZE
+                        labelsize
+  --titlesize TITLESIZE
+                        titlesize
+  --legendsize LEGENDSIZE
+                        legendsize
 ```
 **Example:**
 ```
