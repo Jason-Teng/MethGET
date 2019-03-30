@@ -6,8 +6,6 @@ A bioinformatics pipeline for correlating DNA methylation and gene expression
 # Contents
 ## [System Requirements](#SystemRequirements)
 
-## [Installation](#Installation)
-
 ## [MethGET Input](#MethGETInput)
 
 ## [Running MethGET](#RunningMethGET)
@@ -45,8 +43,6 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install argparse
 	$ pip install pyBigWig
 ```
-# <a name="Installation"></a>Installation
-
 # <a name="MethGETInput"></a>MethGET Input
 * For single methylome
 > 1. DNA Methylation
@@ -102,7 +98,7 @@ For samplelist:
 
 For individual data:
   -n SAMPLENAME, --samplename SAMPLENAME
-                        Setting the name of the set of data. This determines
+                        setting the name of the set of data. This determines
                         the names of output files for downstream analyses
   -f CGMAPFILENAME, --cgmapfilename CGMAPFILENAME
                         input CGmap file
@@ -152,17 +148,17 @@ Important general arguments:
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
                         select the type of correlation, default is pearson
   -re0 {True,False}, --skip0 {True,False}
-                        Whether genes with 0 expression value would be
+                        whether genes with 0 expression value would be
                         included. Default is to include them
   -thrs THRESHOLD, --threshold THRESHOLD
-                        Whether skip genes with expression value that is too
+                        whether skip genes with expression value that is too
                         high, default is to skip genes higher than 1000
                         expression. If want to include them, please set 'None'
   -xlim XLIMIT, --xlimit XLIMIT
-                        Nemeric zoom in the gene expression value to clearly
+                        numeric zoom in the gene expression value to clearly
                         understand the distribution
   -ylim YLIMIT, --ylimit YLIMIT
-                        Nemeric zoom in the DNA methylation level to clearly
+                        Nnmeric zoom in the DNA methylation level to clearly
                         understand the distribution
 
 Graphing arguments:
@@ -174,9 +170,7 @@ Graphing arguments:
   --titlesize TITLESIZE
                         titlesize, default is 20
 ```
-**Example:**
-```
-```
+
 #### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
 #### rankscatter.py
 **Usage:**
@@ -205,10 +199,10 @@ Required arguments:
 
 Important general arguments:
   -re0 {True,False}, --skip0 {True,False}
-                        Whether genes with 0 expression value would be
+                        whether genes with 0 expression value would be
                         included. Default is to include them
   -thrs THRESHOLD, --threshold THRESHOLD
-                        Whether to skip genes with expression value that is
+                        whether to skip genes with expression value that is
                         too high, default is to skip genes higher than 1000
                         expression. If want to include them, please set 'None'
 
@@ -237,9 +231,7 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
-```
-```
+
 #### <a name="boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
 #### grouping.py
 **Usage:**
@@ -257,20 +249,20 @@ optional arguments:
 
 Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
-                        The name of the set of data
+                        the name of the set of data
   -p {boxplot,violinplot}, --plot {boxplot,violinplot}
-                        Create boxplot or violinplot, default is boxplot
+                        create boxplot or violinplot, default is boxplot
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        Choose the context of methylation
+                        choose the context of methylation
   -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
-                        Choose the target region of methylation
+                        choose the target region of methylation
   -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
-                        Define how many group to seperate gene expression,
+                        define how many group to seperate gene expression,
                         default is 5
 
 Important general arguments:
   -re0 {True,False}, --skip0 {True,False}
-                        Whether genes with 0 expression value would be
+                        whether genes with 0 expression value would be
                         included. Default is to include them
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
                         select the type of correlation in the table
@@ -282,7 +274,7 @@ Chart visulaization arguments:
   -sf {True,False}, --showfliers {True,False}
                         remove the outliers in the boxplots
   -ylim YLIMIT, --ylimit YLIMIT
-                        Nemeric value. Optional. zoom in the DNA methylation
+                        Numeric zoom in the DNA methylation
                         level to clearly understand the methylation
                         distribution
 
@@ -297,9 +289,7 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
-```
-```
+
 #### <a name="metaplot"></a>Average methylation level profiles with different expression groups around genes
 #### metaplot.py
 **Usage:**
@@ -328,7 +318,7 @@ optional arguments:
 
 Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
-                        The name of the set of data
+                        the name of the set of data
 
 Graphing arguments:
   -xtick XTICKSIZE, --xticksize XTICKSIZE
@@ -342,9 +332,7 @@ Graphing arguments:
   -legend LEGENDSIZE, --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
-```
-```
+
 ## <a name="Multiplemeth"></a>Multiple-methylome analyses
 #### <a name="deltascatter"></a>Gene level association between changes of DNA methylation and changes of gene expression
 #### comparison.py -p scatter
@@ -394,9 +382,7 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
-**Example:**
-```
-```
+
 #### <a name="heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
 #### comparison.py -p heatmap
 **Usage:**
@@ -421,13 +407,13 @@ optional arguments:
                         choose the target region of methylation
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
                         set threshold to identify the differential methylated
-                        genes
+                        genes, default is 10
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
                         set threshold to identify genes that have expression
-                        change
+                        change, default is 2
   -ad ADDGEVALUE, --addGEvalue ADDGEVALUE
                         add a small value on gene expression value to
-                        calculate the log(fold change)
+                        calculate the log2 fold change, default is 1
   -list {True,False}, --genelist {True,False}
                         create table to show information of the genes selected
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
@@ -445,9 +431,7 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
-**Example:**
-```
-```
+
 
 
 
