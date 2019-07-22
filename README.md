@@ -46,7 +46,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 # <a name="MethGETInput"></a>MethGET Input
 * For single methylome
 > 1. DNA Methylation
->>  CGmap.gz file
+>>  CGmap.gz file (need gzip compressed format)
 ```
 chr1    G       13538   CG      CG      0.6     6       10
 chr1    G       13539   CHG     CC      0.0     0       9
