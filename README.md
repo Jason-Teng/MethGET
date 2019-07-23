@@ -1,6 +1,6 @@
 # MethGET
 
-A bioinformatics pipeline for correlating DNA methylation and gene expression
+A web-based bioinformatics software for correlating DNA methylation and gene expression. The web user-interface can be accessed through http://140.109.56.62:8003/.
 
 
 # Contents
