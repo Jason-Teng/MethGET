@@ -301,7 +301,11 @@ usage:  [-h] [-n SAMPLENAME] [-p {region,point}] [-ma METAVALUEFILE]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -p {region,point}, --plot {region,point}
+
+Required arguments:
+  -n SAMPLENAME, --samplename SAMPLENAME
+                        The name of the set of data
+  -p {region,site}, --plot {region,site}
                         choose the format of the metaplot, default is 'region'
   -ma METAVALUEFILE, --metavaluefile METAVALUEFILE
                         put in the metaplot value file if you have created,
@@ -309,16 +313,14 @@ optional arguments:
   -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
                         define how many group to seperate gene expression,
                         default is 5
-  -re0 {True,False}, --remove0RPKM {True,False}
+  -re0 {True,False}, --skip0 {True,False}
                         remove genes that their expression value is equal to 0
+
+Important general arguments:
   -No_bins NUMBEROFBINS, --numberofbins NUMBEROFBINS
                         define the total of bins from upstream to downstream
   -yaxis {auto,set100}, --yaxissetting {auto,set100}
                         choose if the ticks of yaxis set on 100
-
-Required arguments:
-  -n SAMPLENAME, --samplename SAMPLENAME
-                        the name of the set of data
 
 Graphing arguments:
   -xtick XTICKSIZE, --xticksize XTICKSIZE
