@@ -71,10 +71,10 @@ AT1G01370       8.28111
 >1. Sample Description File 
 >> Sample list
 ```
-WT_A    WT_A_CGmap.gz   WT_A_exp.txt    WT
-WT_B    WT_B_CGmap.gz   WT_B_exp.txt    WT
-MT_A    MT_A_CGmap.gz   MT_A_exp.txt    MT
-MT_B    MT_B_CGmap.gz   MT_B_exp.txt    MT
+trt_1    trt_1_CGmap.gz   trt_1_exp.txt    trt
+trt_2    trt_2_CGmap.gz   trt_2_exp.txt    trt
+ctrl_1    ctrl_1_CGmap.gz   ctrl_1_exp.txt    ctrl
+ctrl_2    ctrl_2_CGmap.gz   ctrl_2_exp.txt    ctrl
 ```
 >2. Gene Annotation File
 >> gene annotation in GTF file
