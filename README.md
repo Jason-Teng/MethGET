@@ -68,7 +68,7 @@ AT1G01370       8.28111
 >> gene annotation in GTF file 
 
 * For multiple methylomes 
->1. Sample Description File 
+>1. Sample Description File (tab-delimited)
 >> Sample list
 ```
 trt_1    trt_1_CGmap.gz   trt_1_exp.txt    trt
