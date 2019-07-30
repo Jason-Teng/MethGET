@@ -172,7 +172,7 @@ Graphing arguments:
 ```
 **Example for correlation:**
 ```
-# scatter plot for correlation
+# scatter plot
 python correlation.py –n demo –p scatter
 ```
 
@@ -229,7 +229,7 @@ Graphing arguments:
 ```
 **Example for ordinal association:**
 ```
-# scatterplot and fitting curves for ordinal association
+# scatterplot and fitting curves
 python ordinal.py -n demo
 ```
 
@@ -237,13 +237,15 @@ python ordinal.py -n demo
 ### grouping.py
 **Usage:**
 ```
-usage:  [-h] [-n SAMPLENAME] [-p {boxplot,violinplot}] [-c {CG,CHG,CHH}]
-        [-t {Gene_Body,Promoter,Exon,Intron}] [-nb NUMBEROFGROUP]
-        [-re0 {True,False}] [-cor {False,pearson,spearman}]
-        [-mean {True,False}] [-sf {True,False}] [-ylim YLIMIT]
-        [--dotsize DOTSIZE] [--textsize TEXTSIZE] [--ticksize TICKSIZE]
-        [--labelsize LABELSIZE] [--titlesize TITLESIZE]
-        [--legendsize LEGENDSIZE]
+usage: grouping.py [-h] [-n SAMPLENAME] [-p {boxplot,violinplot}]
+                   [-c {CG,CHG,CHH,all}]
+                   [-t {Gene_Body,Promoter,Exon,Intron,all}]
+                   [-nb NUMBEROFGROUP] [-re0 {True,False}]
+                   [-cor {False,pearson,spearman}] [-mean {True,False}]
+                   [-sf {True,False}] [-ylim YLIMIT] [--dotsize DOTSIZE]
+                   [--textsize TEXTSIZE] [--ticksize TICKSIZE]
+                   [--labelsize LABELSIZE] [--titlesize TITLESIZE]
+                   [--legendsize LEGENDSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -253,31 +255,26 @@ Required arguments:
                         the name of the set of data
   -p {boxplot,violinplot}, --plot {boxplot,violinplot}
                         create boxplot or violinplot, default is boxplot
-  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        choose the context of methylation
-  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
-                        choose the target region of methylation
+  -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
+                        choose the context of methylation, default 'all' is to choose them all
+  -t {Gene_Body,Promoter,Exon,Intron,all}, --target {Gene_Body,Promoter,Exon,Intron,all}
+                        choose the target region of methylation, default 'all' is to choose them all
   -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
-                        define how many group to seperate gene expression,
-                        default is 5
+                        define how many group to seperate gene expression, default is 5
 
 Important general arguments:
   -re0 {True,False}, --skip0 {True,False}
-                        whether genes with 0 expression value would be
-                        included. Default is to include them
+                        whether genes with 0 expression value would be included. Default 'False' is to include them
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
-                        select the type of correlation in the table
+                        select the type of correlation in the table, default is pearson
 
 Chart visulaization arguments:
   -mean {True,False}, --showmeans {True,False}
-                        whether to show the position of mean in boxplot or
-                        violin plot, default is to show
+                        whether to show the position of mean in boxplot or violin plot, default 'True' is to show
   -sf {True,False}, --showfliers {True,False}
-                        remove the outliers in the boxplots
+                        whether to show outliers in boxplots, default 'True' is to show
   -ylim YLIMIT, --ylimit YLIMIT
-                        Numeric zoom in the DNA methylation
-                        level to clearly understand the methylation
-                        distribution
+                        numeric value. zoom in the DNA methylation level to understand the methylation distribution
 
 Graphing arguments:
   --dotsize DOTSIZE     dotsize
@@ -292,10 +289,8 @@ Graphing arguments:
 ```
 **Example for grouping statistics:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# boxplot
+python grouping.py -n demo -p boxplot
 ```
 
 ### <a name="metaplot"></a>Average methylation level profiles with different expression groups around genes
