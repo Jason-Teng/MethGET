@@ -83,6 +83,7 @@ ctrl_2    ctrl_2_CGmap.gz   ctrl_2_exp.txt    ctrl
 
 # <a name="RunningMethGET"></a>Running MethGET 
 ## <a name="DataPreprocessing"></a>Data Preprocessing
+
 ### preprocess.py
 Use the script preprocess.py to preprocess the data for downstream analyses
 
@@ -120,15 +121,18 @@ python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
 python preprocess.py -s samplelist.txt -g genes.gtf
 ```
 ## <a name="Singlemeth"></a>Single-methylome analyses
-#### <a name="scatter"></a>Correlation analyses of genome-wide DNA methylation and gene expression
-#### scatter.py
+### <a name="scatter"></a>Correlation analyses of genome-wide DNA methylation and gene expression
+### correlation.py
 **Usage:**
 ```
-usage:  [-h] [-n SAMPLENAME] [-p {scatter,kernel}] [-c {CG,CHG,CHH}]
-        [-t {Promoter,Gene_Body,Exon,Intron}] [-cor {False,pearson,spearman}]
-        [-re0 {True,False}] [-thrs THRESHOLD] [-xlim XLIMIT] [-ylim YLIMIT]
-        [--dotsize DOTSIZE] [--textsize TEXTSIZE] [--ticksize TICKSIZE]
-        [--labelsize LABELSIZE] [--titlesize TITLESIZE]
+usage: correlation.py [-h] [-n SAMPLENAME] [-p {scatter,kernel}]
+                      [-c {CG,CHG,CHH,all}]
+                      [-t {Promoter,Gene_Body,Exon,Intron,all}]
+                      [-cor {False,pearson,spearman}] [-re0 {True,False}]
+                      [-thrs THRESHOLD] [-xlim XLIMIT] [-ylim YLIMIT]
+                      [--dotsize DOTSIZE] [--textsize TEXTSIZE]
+                      [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+                      [--titlesize TITLESIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -139,27 +143,28 @@ Required arguments:
   -p {scatter,kernel}, --plot {scatter,kernel}
                         create scatterplot or kernel density plot, default is
                         'scatterplot'
-  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        choose the context of methylation, default is CG
-  -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
-                        choose the target region of methylation, default is
-                        'Promoter'
+  -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
+                        choose the context of methylation, default 'all' is to
+                        choose them all
+  -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
+                        choose the target region of methylation, default 'all'
+                        is to choose them all
 
 Important general arguments:
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
-                        select the type of correlation, default is pearson
+                        select the type of correlation, default is 'pearson'
   -re0 {True,False}, --skip0 {True,False}
-                        whether genes with 0 expression value would be
-                        included. Default is to include them
+                        Whether genes with 0 expression value would be
+                        included. Default 'False' is to include them
   -thrs THRESHOLD, --threshold THRESHOLD
-                        whether skip genes with expression value that is too
-                        high, default is to skip genes higher than 1000
+                        Whether skip genes with expression value that is too
+                        high, default is to skip genes higher than 2000
                         expression. If want to include them, please set 'None'
   -xlim XLIMIT, --xlimit XLIMIT
-                        numeric zoom in the gene expression value to clearly
+                        Nemeric zoom in the gene expression value to clearly
                         understand the distribution
   -ylim YLIMIT, --ylimit YLIMIT
-                        Nnmeric zoom in the DNA methylation level to clearly
+                        Nemeric zoom in the DNA methylation level to clearly
                         understand the distribution
 
 Graphing arguments:
@@ -170,6 +175,14 @@ Graphing arguments:
                         labelsize, default is 20
   --titlesize TITLESIZE
                         titlesize, default is 20
+
+```
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
 ```
 
 #### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
