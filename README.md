@@ -113,7 +113,7 @@ General options:
   -c CUTOFF, --cutoff CUTOFF
                         minimum cytosines that are covered by reads
 ```
-**Example:**
+**Example for preprocess:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
@@ -173,20 +173,20 @@ Graphing arguments:
 **Example for correlation:**
 ```
 # scatter plot for correlation
-python scatter.py –n demo –p scatter
-
+python correlation.py –n demo –p scatter
 ```
 
 ### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
 ### ordinal.py
 **Usage:**
 ```
-usage:  [-h] [-n SAMPLENAME] [-p {scatter,kernel}] [-c {CG,CHG,CHH}]
-        [-t {Gene_Body,Promoter,Exon,Intron}] [-re0 {True,False}]
-        [-thrs THRESHOLD] [-shsca {True,False}] [-line {True,False}]
-        [-smoo SMOOTH_N] [-ylim YLIMIT] [--dotsize DOTSIZE]
-        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
-        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
+usage: ordinal.py [-h] [-n SAMPLENAME] [-c {CG,CHG,CHH,all}]
+                  [-t {Gene_Body,Promoter,Exon,Intron,all}]
+                  [-re0 {True,False}] [-thrs THRESHOLD] [-shsca {True,False}]
+                  [-line {True,False}] [-smoo SMOOTH_N] [-ylim YLIMIT]
+                  [--dotsize DOTSIZE] [--textsize TEXTSIZE]
+                  [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+                  [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -194,37 +194,27 @@ optional arguments:
 Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
                         the name of the set of data
-  -p {scatter,kernel}, --plot {scatter,kernel}
-                        create scatterplot or kernel density plot, default is
-                        'scatterplot'
-  -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        choose the context of methylation, default is 'CG'
-  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
-                        choose the target region of methylation, default is
-                        'Promoter'
+  -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
+                        choose the context of methylation, default 'all' is to choose them all
+  -t {Gene_Body,Promoter,Exon,Intron,all}, --target {Gene_Body,Promoter,Exon,Intron,all}
+                        choose the target region of methylation, default 'all' is to choose them all
 
 Important general arguments:
   -re0 {True,False}, --skip0 {True,False}
-                        whether genes with 0 expression value would be
-                        included. Default is to include them
+                        whether genes with 0 expression value would be included. Default 'False' is to include them
   -thrs THRESHOLD, --threshold THRESHOLD
-                        whether to skip genes with expression value that is
-                        too high, default is to skip genes higher than 1000
-                        expression. If want to include them, please set 'None'
+                        whether to skip genes with expression value that is too high, default is to skip genes higher than 2000.
+                        If want to include them, please set 'None'
 
 chart visulaization arguments:
   -shsca {True,False}, --showscatterplot {True,False}
-                        whether to show the scatterplot or not, default is to
-                        show
+                        whether to show the scatterplot, default is to show
   -line {True,False}, --smoothline {True,False}
-                        whether to show the fitting curve of methylation and
-                        gene expression, default is to show
+                        whether to show the fitting curves, default is to show
   -smoo SMOOTH_N, --smooth_N SMOOTH_N
-                        set the number of ticks to average when drawing the
-                        fitting curve, default is 500
+                        set the number of ticks to average when drawing the fitting curve, default is 500
   -ylim YLIMIT, --ylimit YLIMIT
-                        Nemeric zoom in the DNA methylation level to clearly
-                        understand the distribution
+                        numeric zoom in the DNA methylation level to clearly understand the distribution
 
 Graphing arguments:
   --dotsize DOTSIZE     dotsize
@@ -239,10 +229,8 @@ Graphing arguments:
 ```
 **Example for ordinal association:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# scatterplot and fitting curves for ordinal association
+python ordinal.py -n demo
 ```
 
 ### <a name="boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
