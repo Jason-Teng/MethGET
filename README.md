@@ -297,33 +297,41 @@ python grouping.py -n demo -p boxplot
 ### metagene.py
 **Usage:**
 ```
-usage:  [-h] [-n SAMPLENAME] [-p {region,point}] [-ma METAVALUEFILE]
-        [-nb NUMBEROFGROUP] [-re0 {True,False}] [-No_bins NUMBEROFBINS]
-        [-yaxis {auto,set100}] [-xtick XTICKSIZE] [-ytick YTICKSIZE]
-        [-label LABELSIZE] [-title TITLESIZE] [-legend LEGENDSIZE]
+usage: metagene.py [-h] [-n SAMPLENAME] [-p {region,site}] [-ma {True,False}]
+                   [-nb NUMBEROFGROUP] [-re0 {True,False}]
+                   [-No_bins NUMBEROFBINS] [-psn {TSS,TES}] [-bp BASEPAIR]
+                   [-yaxis {auto,set100}] [-xtick XTICKSIZE]
+                   [-ytick YTICKSIZE] [-label LABELSIZE] [-title TITLESIZE]
+                   [-legend LEGENDSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
 
 Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
-                        The name of the set of data
+                        the name of the set of data
   -p {region,site}, --plot {region,site}
-                        choose the format of the metaplot, default is 'region'
-  -ma METAVALUEFILE, --metavaluefile METAVALUEFILE
-                        put in the metaplot value file if you have created,
-                        default is False
+                        choose the format of the metaplot, default is region
+  -ma {True,False}, --metavaluefile {True,False}
+                        put in the metaplot value file if you have created, default is False
   -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
-                        define how many group to seperate gene expression,
-                        default is 5
+                        define how many group to seperate gene expression, default is 5
   -re0 {True,False}, --skip0 {True,False}
-                        remove genes that their expression value is equal to 0
+                        remove genes that their expression value is equal to 0, default is not removing them.
 
-Important general arguments:
+Important arguments:
   -No_bins NUMBEROFBINS, --numberofbins NUMBEROFBINS
-                        define the total of bins from upstream to downstream
+                        for 'region' or 'site' plot. 'region' define the total of windows from upstream 
+			to downstream, suggest 30. 'site' is the windows of one side, suggest 10.
+  -psn {TSS,TES}, --posname {TSS,TES}
+                        for 'site' plot. Choose the specific position of the metagene,
+			default is TSS (transcription start site)
+  -bp BASEPAIR, --basepair BASEPAIR
+                        for 'site' plot. The basepairs flanking by the chosen
+                        position, default is 2000
   -yaxis {auto,set100}, --yaxissetting {auto,set100}
-                        choose if the ticks of yaxis set on 100
+                        choose if the ticks of yaxis set on 100, default
+                        'auto' will automatically adjusted.
 
 Graphing arguments:
   -xtick XTICKSIZE, --xticksize XTICKSIZE
@@ -336,13 +344,16 @@ Graphing arguments:
                         titlesize
   -legend LEGENDSIZE, --legendsize LEGENDSIZE
                         legendsize
+
 ```
 **Example for metagene:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# region plot
+python metagene.py -n demo -p region -No_bins 30
+# site plot
+python metagene.py -n demo -p site -No_bins 10 -bp 2000
+# if created metagene 'region' value
+python metagene.py -n demo -p region -No_bins 30 -ma True
 ```
 
 ## <a name="Multiplemeth"></a>Multiple-methylome analyses
