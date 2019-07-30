@@ -361,37 +361,44 @@ python metagene.py -n demo -p region -No_bins 30 -ma True
 ### comparison.py
 **Usage:**
 ```
-usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
-        [-t {Gene_Body,Promoter,Exon,Intron}] [-mthr METHTHRESHOLD]
-        [-ethr EXPTHRESHOLD] [-ad ADDGEVALUE] [-list {True,False}]
-        [-cor {False,pearson,spearman}] [--dotsize DOTSIZE]
-        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
-        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
-        [--fontsize FONTSIZE]
+usage: comparison.py [-h] [-s SAMPLELIST] [-p {scatter,kernel}]
+                     [-c {CG,CHG,CHH}]
+                     [-t {Promoter,Gene_Body,Exon,Intron,all}]
+                     [-mthr METHTHRESHOLD] [-ethr EXPTHRESHOLD]
+                     [-cor {False,pearson,spearman}]
+                     [--shownumber {False,True}] [--methmin METHMIN]
+                     [--methmax METHMAX] [--expmin EXPMIN] [--expmax EXPMAX]
+                     [--dotsize DOTSIZE] [--textsize TEXTSIZE]
+                     [--ticksize TICKSIZE] [--labelsize LABELSIZE]
+                     [--titlesize TITLESIZE] [--fontsize FONTSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
+
+Required arguments:
   -s SAMPLELIST, --samplelist SAMPLELIST
                         put in the sample description file
-  -p {scatter,heatmap}, --plot {scatter,heatmap}
-                        create scatterplot or heatmap
+  -p {scatter,kernel}, --plot {scatter,kernel}
+                        create scatterplot or kernel density plot
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        choose the context of methylation
-  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
-                        choose the target region of methylation
+                        choose the context of methylation, default is CG
+  -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
+                        choose the target region of methylation, default is Promoter
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
                         set threshold to identify the differential methylated
-                        genes
+                        genes, default 'auto' uses (CG:10, CHG:1, CHH:1)
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
-                        set threshold to identify genes that have expression
-                        change
-  -ad ADDGEVALUE, --addGEvalue ADDGEVALUE
-                        add a small value on gene expression value to
-                        calculate the log(fold change)
-  -list {True,False}, --genelist {True,False}
-                        create table to show information of the genes selected
+                        set threshold to identify genes that have expression change
+
+Important general arguments:
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
                         select the type of correlation, default is 'pearson'
+  --shownumber {False,True}
+                        whether to show the number of significant genes
+  --methmin METHMIN     minimum Δ methylation for x-axis
+  --methmax METHMAX     maximum Δ methylation for x-axis
+  --expmin EXPMIN       minimum Δ gene expression for y-axis
+  --expmax EXPMAX       maximum Δ gene expression for y-axis
 
 Graphing arguments:
   --dotsize DOTSIZE     dotsize
@@ -401,16 +408,14 @@ Graphing arguments:
                         labelsize
   --titlesize TITLESIZE
                         titlesize
-  --legendsize LEGENDSIZE
-                        legendsize
   --fontsize FONTSIZE   fontsize
 ```
 **Example for comparison:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# show the correlation on scatterplot
+python comparison.py -s samplelist.txt -c CG -t Promoter -cor Pearson
+# show number of differential genes on scatterplot
+python comparison.py -s samplelist.txt -c CG -t Promoter -cor False --shownumber True
 ```
 
 ### <a name="heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
