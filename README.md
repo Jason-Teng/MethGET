@@ -141,31 +141,24 @@ Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
                         the name of the set of data
   -p {scatter,kernel}, --plot {scatter,kernel}
-                        create scatterplot or kernel density plot, default is
-                        'scatterplot'
+                        create scatterplot or kernel density plot, default is 'scatterplot'
   -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
-                        choose the context of methylation, default 'all' is to
-                        choose them all
+                        choose the context of methylation, default 'all' is to choose them all
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
-                        choose the target region of methylation, default 'all'
-                        is to choose them all
+                        choose the target region of methylation, default 'all' is to choose them all
 
 Important general arguments:
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
                         select the type of correlation, default is 'pearson'
   -re0 {True,False}, --skip0 {True,False}
-                        Whether genes with 0 expression value would be
-                        included. Default 'False' is to include them
+                        Whether genes with 0 expression value would be included. Default 'False' is to include them
   -thrs THRESHOLD, --threshold THRESHOLD
-                        Whether skip genes with expression value that is too
-                        high, default is to skip genes higher than 2000
+                        Whether skip genes with expression value that is too high, default is to skip genes higher than 2000
                         expression. If want to include them, please set 'None'
   -xlim XLIMIT, --xlimit XLIMIT
-                        Nemeric zoom in the gene expression value to clearly
-                        understand the distribution
+                        Nemeric zoom in the gene expression value to clearly understand the distribution
   -ylim YLIMIT, --ylimit YLIMIT
-                        Nemeric zoom in the DNA methylation level to clearly
-                        understand the distribution
+                        Nemeric zoom in the DNA methylation level to clearly understand the distribution
 
 Graphing arguments:
   --dotsize DOTSIZE     dotsize, default is 30
@@ -177,12 +170,11 @@ Graphing arguments:
                         titlesize, default is 20
 
 ```
-**Example:**
+**Example for correlation:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# scatter plot for correlation
+python scatter.py –n demo –p scatter
+
 ```
 
 ### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
@@ -245,7 +237,7 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
+**Example for ordinal association:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
@@ -310,7 +302,7 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
+**Example for grouping statistics:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
@@ -362,7 +354,7 @@ Graphing arguments:
   -legend LEGENDSIZE, --legendsize LEGENDSIZE
                         legendsize
 ```
-**Example:**
+**Example for metagene:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
@@ -419,7 +411,7 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
-**Example:**
+**Example for comparison:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
@@ -475,7 +467,7 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
-**Example:**
+**Example for heatmap:**
 ```
 # individual data
 python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
