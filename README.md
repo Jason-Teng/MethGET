@@ -44,7 +44,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install pyBigWig
 ```
 # <a name="MethGETInput"></a>MethGET Input
-* For single methylome
+#### For single methylome
 > 1. DNA Methylation
 >>  CGmap.gz file (need gzip compressed format)
 ```
@@ -67,7 +67,7 @@ AT1G01370       8.28111
 > 3. Gene Annotation File
 >> gene annotation in GTF file 
 
-* For multiple methylomes 
+### For multiple methylomes 
 >1. Sample Description File (tab-delimited)
 >> Sample list
 ```
@@ -82,7 +82,7 @@ ctrl_2    ctrl_2_CGmap.gz   ctrl_2_exp.txt    ctrl
 
 # <a name="RunningMethGET"></a>Running MethGET 
 ## <a name="DataPreprocessing"></a>Data Preprocessing
-#### preprocess.py
+### preprocess.py
 Use the script preprocess.py to preprocess the data for downstream analyses
 
 **Usage:**
