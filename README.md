@@ -44,7 +44,8 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install pyBigWig
 ```
 # <a name="MethGETInput"></a>MethGET Input
-#### For single methylome
+
+### For single methylome
 > 1. DNA Methylation
 >>  CGmap.gz file (need gzip compressed format)
 ```
@@ -433,6 +434,7 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
+
 
 
 
