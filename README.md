@@ -185,8 +185,8 @@ python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
 python preprocess.py -s samplelist.txt -g genes.gtf
 ```
 
-#### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
-#### rankscatter.py
+### <a name="rankscatter"></a>Ordinal association analyses with genes ranked by gene expression level
+### ordinal.py
 **Usage:**
 ```
 usage:  [-h] [-n SAMPLENAME] [-p {scatter,kernel}] [-c {CG,CHG,CHH}]
@@ -245,9 +245,16 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
+```
 
-#### <a name="boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
-#### grouping.py
+### <a name="boxplot"></a>Distribution of DNA methylation by groups of genes with different expression level
+### grouping.py
 **Usage:**
 ```
 usage:  [-h] [-n SAMPLENAME] [-p {boxplot,violinplot}] [-c {CG,CHG,CHH}]
@@ -303,9 +310,16 @@ Graphing arguments:
   --legendsize LEGENDSIZE
                         legendsize
 ```
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
+```
 
-#### <a name="metaplot"></a>Average methylation level profiles with different expression groups around genes
-#### metaplot.py
+### <a name="metaplot"></a>Average methylation level profiles with different expression groups around genes
+### metagene.py
 **Usage:**
 ```
 usage:  [-h] [-n SAMPLENAME] [-p {region,point}] [-ma METAVALUEFILE]
@@ -348,10 +362,17 @@ Graphing arguments:
   -legend LEGENDSIZE, --legendsize LEGENDSIZE
                         legendsize
 ```
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
+```
 
 ## <a name="Multiplemeth"></a>Multiple-methylome analyses
-#### <a name="deltascatter"></a>Gene level association between changes of DNA methylation and changes of gene expression
-#### comparison.py -p scatter
+### <a name="deltascatter"></a>Gene level association between changes of DNA methylation and changes of gene expression
+### comparison.py
 **Usage:**
 ```
 usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
@@ -398,9 +419,16 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
+```
 
-#### <a name="heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
-#### comparison.py -p heatmap
+### <a name="heatmap"></a>Heatmap representation of DNA methylation and gene expression data together
+### heatmap.py
 **Usage:**
 ```
 usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
@@ -447,7 +475,13 @@ Graphing arguments:
                         legendsize
   --fontsize FONTSIZE   fontsize
 ```
-
+**Example:**
+```
+# individual data
+python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+# for samplelist
+python preprocess.py -s samplelist.txt -g genes.gtf
+```
 
 
 
