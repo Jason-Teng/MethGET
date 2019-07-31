@@ -141,7 +141,7 @@ Required arguments:
   -n SAMPLENAME, --samplename SAMPLENAME
                         the name of the set of data
   -p {scatter,kernel}, --plot {scatter,kernel}
-                        create scatterplot or kernel density plot, default is 'scatterplot'
+                        create scatterplot or kernel density plot, default is 'scatter'
   -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
                         choose the context of methylation, default 'all' is to choose them all
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
@@ -361,11 +361,10 @@ python metagene.py -n demo -p region -No_bins 30 -ma True
 ### comparison.py
 **Usage:**
 ```
-usage: comparison.py [-h] [-s SAMPLELIST] [-p {scatter,kernel}]
-                     [-c {CG,CHG,CHH}]
+usage: comparison.py [-h] [-s SAMPLELIST] [-c {CG,CHG,CHH}]
                      [-t {Promoter,Gene_Body,Exon,Intron,all}]
                      [-mthr METHTHRESHOLD] [-ethr EXPTHRESHOLD]
-                     [-cor {False,pearson,spearman}]
+                     [-p {scatter,kernel}] [-cor {False,pearson,spearman}]
                      [--shownumber {False,True}] [--methmin METHMIN]
                      [--methmax METHMAX] [--expmin EXPMIN] [--expmax EXPMAX]
                      [--dotsize DOTSIZE] [--textsize TEXTSIZE]
@@ -378,23 +377,25 @@ optional arguments:
 Required arguments:
   -s SAMPLELIST, --samplelist SAMPLELIST
                         put in the sample description file
-  -p {scatter,kernel}, --plot {scatter,kernel}
-                        create scatterplot or kernel density plot
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
                         choose the context of methylation, default is CG
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
                         choose the target region of methylation, default is Promoter
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
-                        set threshold to identify the differential methylated
-                        genes, default 'auto' uses (CG:10, CHG:1, CHH:1)
+                        set cutoff of differential methylated genes. default
+                        'auto' uses Δ methylation, CG:10, CHG:1, CHH:1
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
-                        set threshold to identify genes that have expression change
+                        set cutoff to identify genes that have expression
+                        changes, default uses Δ expression log2FC is 1
 
 Important general arguments:
+  -p {scatter,kernel}, --plot {scatter,kernel}
+                        create scatterplot or kernel density plot, default is scatter
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
                         select the type of correlation, default is 'pearson'
   --shownumber {False,True}
-                        whether to show the number of significant genes
+                        whether to show the number of significant genes,
+                        default False is not show
   --methmin METHMIN     minimum Δ methylation for x-axis
   --methmax METHMAX     maximum Δ methylation for x-axis
   --expmin EXPMIN       minimum Δ gene expression for y-axis
@@ -413,7 +414,7 @@ Graphing arguments:
 **Example for comparison:**
 ```
 # show the correlation on scatterplot
-python comparison.py -s samplelist.txt -c CG -t Promoter -cor Pearson
+python comparison.py -s samplelist.txt -c CG -t Promoter -cor pearson
 # show number of differential genes on scatterplot
 python comparison.py -s samplelist.txt -c CG -t Promoter -cor False --shownumber True
 ```
@@ -422,56 +423,41 @@ python comparison.py -s samplelist.txt -c CG -t Promoter -cor False --shownumber
 ### heatmap.py
 **Usage:**
 ```
-usage:  [-h] [-s SAMPLELIST] [-p {scatter,heatmap}] [-c {CG,CHG,CHH}]
-        [-t {Gene_Body,Promoter,Exon,Intron}] [-mthr METHTHRESHOLD]
-        [-ethr EXPTHRESHOLD] [-ad ADDGEVALUE] [-list {True,False}]
-        [-cor {False,pearson,spearman}] [--dotsize DOTSIZE]
-        [--textsize TEXTSIZE] [--ticksize TICKSIZE] [--labelsize LABELSIZE]
-        [--titlesize TITLESIZE] [--legendsize LEGENDSIZE]
-        [--fontsize FONTSIZE]
+usage: heatmap.py [-h] [-s SAMPLELIST] [-c {CG,CHG,CHH}]
+                  [-t {Promoter,Gene_Body,Exon,Intron}] [-mthr METHTHRESHOLD]
+                  [-ethr EXPTHRESHOLD] [-mmax MMAX] [-emax EMAX]
+                  [--fontsize FONTSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
+
+Required arguments:
   -s SAMPLELIST, --samplelist SAMPLELIST
                         put in the sample description file
-  -p {scatter,heatmap}, --plot {scatter,heatmap}
-                        create scatterplot or heatmap
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
-                        choose the context of methylation
-  -t {Gene_Body,Promoter,Exon,Intron}, --target {Gene_Body,Promoter,Exon,Intron}
-                        choose the target region of methylation
+                        choose the context of methylation, default is CG
+  -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
+                        choose the target region of methylation, default is Promoter
+
+Important general arguments:
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
-                        set threshold to identify the differential methylated
-                        genes, default is 10
+                        set cutoff of differential methylated genes. default
+                        'auto' uses Δ methylation, CG:10, CHG:1, CHH:1
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
-                        set threshold to identify genes that have expression
-                        change, default is 2
-  -ad ADDGEVALUE, --addGEvalue ADDGEVALUE
-                        add a small value on gene expression value to
-                        calculate the log2 fold change, default is 1
-  -list {True,False}, --genelist {True,False}
-                        create table to show information of the genes selected
-  -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
-                        select the type of correlation, default is 'pearson'
+                        set cutoff to identify genes that have expression
+                        changes, default uses Δ expression log2FC is 1
+  -mmax MMAX, --mmax MMAX
+                        set the max methylation value for heatmap, default is 100
+  -emax EMAX, --emax EMAX
+                        set the max expression value for heatmap, default is 20
 
 Graphing arguments:
-  --dotsize DOTSIZE     dotsize
-  --textsize TEXTSIZE   textsize
-  --ticksize TICKSIZE   ticksize
-  --labelsize LABELSIZE
-                        labelsize
-  --titlesize TITLESIZE
-                        titlesize
-  --legendsize LEGENDSIZE
-                        legendsize
   --fontsize FONTSIZE   fontsize
 ```
 **Example for heatmap:**
 ```
-# individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
-# for samplelist
-python preprocess.py -s samplelist.txt -g genes.gtf
+# heatmap
+python heatmap.py -c CG -t Promoter
 ```
 
 
