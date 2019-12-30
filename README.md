@@ -217,15 +217,16 @@ chart visulaization arguments:
                         numeric zoom in the DNA methylation level to clearly understand the distribution
 
 Graphing arguments:
-  --dotsize DOTSIZE     dotsize
-  --textsize TEXTSIZE   textsize
-  --ticksize TICKSIZE   ticksize
+  --dotsize DOTSIZE     dotsize, default is 20
+  --textsize TEXTSIZE   textsize, default is 25
+  --ticksize TICKSIZE   ticksize, default is 15
   --labelsize LABELSIZE
-                        labelsize
+                        labelsize,, default is 25
   --titlesize TITLESIZE
-                        titlesize
+                        titlesize, default is 25
   --legendsize LEGENDSIZE
-                        legendsize
+                        legendsize, default is 20
+
 ```
 **Example for ordinal association:**
 ```
