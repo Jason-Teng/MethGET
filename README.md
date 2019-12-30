@@ -116,7 +116,7 @@ General options:
 **Example for preprocess:**
 ```
 # individual data
-python preprocess.py -n demo -f WT.CGmap -e WT.exp -g genes.gtf
+python preprocess.py -n demo -f WT.CGmap.gz -e WT_exp.txt -g genes.gtf
 # for samplelist
 python preprocess.py -s samplelist.txt -g genes.gtf
 ```
