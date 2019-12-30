@@ -337,15 +337,16 @@ Important arguments:
 
 Graphing arguments:
   -xtick XTICKSIZE, --xticksize XTICKSIZE
-                        the size of the xticks (upstream, gene, downstream)
+                        the size of the xticks (upstream, gene, downstream),
+                        default is 20
   -ytick YTICKSIZE, --yticksize YTICKSIZE
-                        the size of the yticks (methylation level)
+                        the size of the yticks (methylation level), default is 
   -label LABELSIZE, --labelsize LABELSIZE
-                        labelsize
+                        labelsize, default is 20
   -title TITLESIZE, --titlesize TITLESIZE
-                        titlesize
+                        titlesize, default is 20
   -legend LEGENDSIZE, --legendsize LEGENDSIZE
-                        legendsize
+                        legendsize, default is 15
 
 ```
 **Example for metagene:**
