@@ -404,14 +404,15 @@ Important general arguments:
   --expmax EXPMAX       maximum Δ gene expression for y-axis
 
 Graphing arguments:
-  --dotsize DOTSIZE     dotsize
-  --textsize TEXTSIZE   textsize
-  --ticksize TICKSIZE   ticksize
+  --dotsize DOTSIZE     dotsize, default is 20
+  --textsize TEXTSIZE   textsize, default is 25
+  --ticksize TICKSIZE   ticksize, default is 15
   --labelsize LABELSIZE
-                        labelsize
+                        labelsize, default is 25
   --titlesize TITLESIZE
-                        titlesize
-  --fontsize FONTSIZE   fontsize
+                        titlesize, default is 25
+  --fontsize FONTSIZE   fontsize, default is 1.2
+
 ```
 **Example for comparison:**
 ```
@@ -454,7 +455,7 @@ Important general arguments:
                         set the max expression value for heatmap, default is 20
 
 Graphing arguments:
-  --fontsize FONTSIZE   fontsize
+  --fontsize FONTSIZE   fontsize, default is 1.2
 ```
 **Example for heatmap:**
 ```
