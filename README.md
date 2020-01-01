@@ -383,26 +383,28 @@ Required arguments:
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
                         choose the context of methylation, default is CG
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
-                        choose the target region of methylation, default is Promoter
+                        choose the target region of methylation, default is
+                        Promoter
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
                         set cutoff of differential methylated genes. default
-                        'auto' uses Δ methylation, CG:10, CHG:1, CHH:1
+                        'auto' uses methylation changes, CG:10, CHG:1, CHH:1
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
                         set cutoff to identify genes that have expression
-                        changes, default uses Δ expression log2FC is 1
+                        changes, default uses expression changes: log2FC is 1
 
 Important general arguments:
   -p {scatter,kernel}, --plot {scatter,kernel}
-                        create scatterplot or kernel density plot, default is scatter
+                        create scatterplot or kernel density plot, default is
+                        scatter
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
-                        select the type of correlation, default is 'pearson'
+                        select the type of correlation, default is pearson
   --shownumber {False,True}
                         whether to show the number of significant genes,
                         default False is not show
-  --methmin METHMIN     minimum Δ methylation for x-axis
-  --methmax METHMAX     maximum Δ methylation for x-axis
-  --expmin EXPMIN       minimum Δ gene expression for y-axis
-  --expmax EXPMAX       maximum Δ gene expression for y-axis
+  --methmin METHMIN     minimum methylation changes for x-axis
+  --methmax METHMAX     maximum methylation changes for x-axis
+  --expmin EXPMIN       minimum gene expression changes for y-axis
+  --expmax EXPMAX       maximum gene expression changes for y-axis
 
 Graphing arguments:
   --dotsize DOTSIZE     dotsize, default is 20
@@ -441,22 +443,27 @@ Required arguments:
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
                         choose the context of methylation, default is CG
   -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
-                        choose the target region of methylation, default is Promoter
+                        choose the target region of methylation, default is
+                        Promoter
 
 Important general arguments:
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
                         set cutoff of differential methylated genes. default
-                        'auto' uses Δ methylation, CG:10, CHG:1, CHH:1
+                        'auto' uses changes of methylation, CG:10, CHG:1,
+                        CHH:1
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
                         set cutoff to identify genes that have expression
-                        changes, default uses Δ expression log2FC is 1
+                        changes, default uses expression changes: log2FC is 1
   -mmax MMAX, --mmax MMAX
-                        set the max methylation value for heatmap, default is 100
+                        set the max methylation value for heatmap, default is
+                        100
   -emax EMAX, --emax EMAX
-                        set the max expression value for heatmap, default is 20
+                        set the max expression value for heatmap, default is
+                        20
 
 Graphing arguments:
   --fontsize FONTSIZE   fontsize, default is 1.2
+
 ```
 **Example for heatmap:**
 ```
