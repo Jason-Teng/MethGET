@@ -42,12 +42,12 @@ def get_parser():
 	group2.add_argument("-sf","--showfliers",default="True",choices=["True","False"],help="whether to show outliers in boxplots, default 'True' is to show")
 	group2.add_argument("-ylim","--ylimit",default="False",choices=["True","False"], help="whether to show the y-axis to 100, default False is automatically adjusted")
 	group4 = parser.add_argument_group('Graphing arguments')
-	group4.add_argument("--dotsize",default=20,type=int,help="dotsize")
-	group4.add_argument("--textsize",default=20,type=int,help="textsize")
-	group4.add_argument("--ticksize",default=15,type=int,help="ticksize")
-	group4.add_argument("--labelsize",default=20,type=int,help="labelsize")
-	group4.add_argument("--titlesize",default=20,type=int,help="titlesize")
-	group4.add_argument("--legendsize",default=20,type=int,help="legendsize")
+	group4.add_argument("--dotsize",default=20,type=int,help="dotsize, default is 20")
+	group4.add_argument("--textsize",default=20,type=int,help="textsize, default is 20")
+	group4.add_argument("--ticksize",default=15,type=int,help="ticksize, default is 15")
+	group4.add_argument("--labelsize",default=20,type=int,help="labelsize, default is 20")
+	group4.add_argument("--titlesize",default=20,type=int,help="titlesize, default is 20")
+	group4.add_argument("--legendsize",default=20,type=int,help="legendsize, default is 20")
 	return parser
 
 

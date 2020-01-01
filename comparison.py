@@ -33,23 +33,23 @@ def get_parser():
     group1.add_argument("-s","--samplelist",default = "samplelist.txt",type=str,help="put in the sample description file")
     group1.add_argument("-c","--context",type=str,default="CG",choices=["CG","CHG","CHH"],help="choose the context of methylation, default is CG")
     group1.add_argument("-t","--target",type=str,default="Promoter",choices=["Promoter","Gene_Body","Exon","Intron","all"],help="choose the target region of methylation, default is Promoter")
-    group1.add_argument("-mthr","--meththreshold",default="auto",help="set cutoff of differential methylated genes. default 'auto' uses Δ methylation, CG:10, CHG:1, CHH:1")
-    group1.add_argument("-ethr","--expthreshold",default=1.0,type=float,help="set cutoff to identify genes that have expression changes, default uses Δ expression log2FC is 1")# 現在是倍數了
+    group1.add_argument("-mthr","--meththreshold",default="auto",help="set cutoff of differential methylated genes. default 'auto' uses methylation changes, CG:10, CHG:1, CHH:1")
+    group1.add_argument("-ethr","--expthreshold",default=1.0,type=float,help="set cutoff to identify genes that have expression changes, default uses expression changes: log2FC is 1")
     group2 = parser.add_argument_group('Important general arguments')
     group2.add_argument("-p","--plot",type=str,default="scatter",choices=["scatter","kernel"],help="create scatterplot or kernel density plot, default is scatter")
     group2.add_argument("-cor","--correlation",default="pearson",choices=["False","pearson","spearman"],help="select the type of correlation, default is pearson")
     group2.add_argument("--shownumber",default="False",choices=["False","True"],help="whether to show the number of significant genes, default False is not show")
-    group2.add_argument("--methmin",default=None,help="minimum Δ methylation for x-axis")
-    group2.add_argument("--methmax",default=None,help="maximum Δ methylation for x-axis")
-    group2.add_argument("--expmin",default=None,help="minimum Δ gene expression for y-axis")
-    group2.add_argument("--expmax",default=None,help="maximum Δ gene expression for y-axis")
+    group2.add_argument("--methmin",default=None,help="minimum methylation changes for x-axis")
+    group2.add_argument("--methmax",default=None,help="maximum methylation changes for x-axis")
+    group2.add_argument("--expmin",default=None,help="minimum gene expression changes for y-axis")
+    group2.add_argument("--expmax",default=None,help="maximum gene expression changes for y-axis")
     group3 = parser.add_argument_group('Graphing arguments')
-    group3.add_argument("--dotsize",default=20,type=int,help="dotsize")
-    group3.add_argument("--textsize",default=25,type=int,help="textsize")
-    group3.add_argument("--ticksize",default=15,type=int,help="ticksize")
-    group3.add_argument("--labelsize",default=25,type=int,help="labelsize")
-    group3.add_argument("--titlesize",default=25,type=int,help="titlesize")
-    group3.add_argument("--fontsize",default=1.2,type=int,help="fontsize")
+    group3.add_argument("--dotsize",default=20,type=int,help="dotsize, default is 20")
+    group3.add_argument("--textsize",default=25,type=int,help="textsize, default is 25")
+    group3.add_argument("--ticksize",default=15,type=int,help="ticksize, default is 15")
+    group3.add_argument("--labelsize",default=25,type=int,help="labelsize, default is 25")
+    group3.add_argument("--titlesize",default=25,type=int,help="titlesize, default is 25")
+    group3.add_argument("--fontsize",default=1.2,type=float,help="fontsize, default is 1.2")
     return parser
 
 
@@ -183,8 +183,8 @@ def CompareScatterplot(dropres,selectMethExp,selectMethExp_1,selectMethExp_2,sel
                 plt.text(c,b,"%d"%(len(selectMethExp_2)),fontsize=textsize,horizontalalignment='left',verticalalignment='top')
                 plt.text(c,d,"%d"%(len(selectMethExp_3)),fontsize=textsize,horizontalalignment='left',verticalalignment='bottom')
                 plt.text(a,d,"%d"%(len(selectMethExp_4)),fontsize=textsize,horizontalalignment='right',verticalalignment='bottom')
-            plt.xlabel(r'$\Delta\ methylation$'+" (%)",fontsize=labelsize,)
-            plt.ylabel(r'$\Delta\ gene\ expression\ (log2\ fold\ change)$',fontsize=labelsize)
+            plt.xlabel(r'$Methylation\ level\ changes$' + " (%)",fontsize=labelsize,)
+            plt.ylabel(r'$Gene\ expression\ changes\ (log2\ FC)$',fontsize=labelsize)
             plt.xticks(fontsize=ticksize)
             plt.yticks(fontsize=ticksize)
             plt.xlim(methmin,methmax)
@@ -196,13 +196,13 @@ def CompareScatterplot(dropres,selectMethExp,selectMethExp_1,selectMethExp_2,sel
             deltascattertablename = "chosen_genes.txt" 
             try:
                 ratio = float(len(selectMethExp_1)*len(selectMethExp_3))/(len(selectMethExp_2)*len(selectMethExp_4))
-                deltainfo = "#quardrant_1: %d, #quardrant_2: %d, #quardrant_3: %d, #quardrant_4: %d, ovaerall variation: %f, ratio (+/-): %f."%(len(selectMethExp_1), len(selectMethExp_2), len(selectMethExp_3), len(selectMethExp_4), variation,ratio)
+                deltainfo = "#quardrant_1: %d, #quardrant_2: %d, #quardrant_3: %d, #quardrant_4: %d."%(len(selectMethExp_1), len(selectMethExp_2), len(selectMethExp_3), len(selectMethExp_4))
             except:
                 ratio = "division by zero"
-                deltainfo = "#quardrant_1: %d, #quardrant_2: %d, #quardrant_3: %d, #quardrant_4: %d, ovaerall variation: %f, ratio (+/-): %s."%(len(selectMethExp_1), len(selectMethExp_2), len(selectMethExp_3), len(selectMethExp_4), variation,ratio)
+                deltainfo = "#quardrant_1: %d, #quardrant_2: %d, #quardrant_3: %d, #quardrant_4: %d."%(len(selectMethExp_1), len(selectMethExp_2), len(selectMethExp_3), len(selectMethExp_4))
             print("information for %s, %s"%(context, target), deltainfo)
             df = selectMethExp.iloc[:,1:-1]        
-            df.to_csv(i + "_" + j + "_" + deltascattertablename, sep="\t",index=False, header=True) #sep="\t"
+            df.to_csv(i + "_" + j + "_" + deltascattertablename, sep="\t",index=False, header=True) 
             #plt.show()
             plt.close()
     return deltascatterplotname, deltascattertablename

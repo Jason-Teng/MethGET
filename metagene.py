@@ -18,6 +18,7 @@ import time
 import os, sys
 import scipy
 import seaborn as sns
+import warnings
 sns.set_style("darkgrid")
 warnings.filterwarnings('ignore')
 
@@ -35,16 +36,16 @@ def get_parser():
     group1.add_argument("-nb","--numberofgroup",default=5,type=int,help="define how many group to seperate gene expression, default is 5")
     group1.add_argument("-re0","--skip0",default="False",choices=["True","False"],help="remove genes that their expression value is equal to 0, default is not removing them.")    
     group2 = parser.add_argument_group('Important arguments')
-    group2.add_argument("-No_bins","--numberofbins",type=int,help="for 'region' or 'site' plot. 'region' define the total of windows from upstream to downstream, suggest 30. 'site' is the windows of one side, suggest 10.")
+    group2.add_argument("-No_bins","--numberofbins",default=30,type=int,help="for 'region' or 'site' plot. 'region' define the total of windows from upstream to downstream, suggest 30. 'site' is the windows of one side, suggest 10.")
     group2.add_argument("-psn","--posname",default="TSS",choices=["TSS","TES"],help="for 'site' plot. Choose the specific position of the metagene, default is TSS (transcription start site)")
     group2.add_argument("-bp","--basepair",default=2000,type=int,help="for 'site' plot. The basepairs flanking by the chosen position, default is 2000")
     group2.add_argument("-yaxis","--yaxissetting",default="auto",choices=["auto","set100"],help="choose if the ticks of yaxis set on 100, default 'auto' will automatically adjusted.")    
     group3 = parser.add_argument_group('Graphing arguments')
-    group3.add_argument("-xtick","--xticksize",default=20,type=int,help="the size of the xticks (upstream, gene, downstream)")
-    group3.add_argument("-ytick","--yticksize",default=15,type=int,help="the size of the yticks (methylation level)")
-    group3.add_argument("-label","--labelsize",default=20,type=int,help="labelsize")
-    group3.add_argument("-title","--titlesize",default=20,type=int,help="titlesize")
-    group3.add_argument("-legend","--legendsize",default=15,type=int,help="legendsize")
+    group3.add_argument("-xtick","--xticksize",default=20,type=int,help="the size of the xticks (upstream, gene, downstream), default is 20")
+    group3.add_argument("-ytick","--yticksize",default=15,type=int,help="the size of the yticks (methylation level), default is 15")
+    group3.add_argument("-label","--labelsize",default=20,type=int,help="labelsize, default is 20")
+    group3.add_argument("-title","--titlesize",default=20,type=int,help="titlesize, default is 20")
+    group3.add_argument("-legend","--legendsize",default=15,type=int,help="legendsize, default is 15")
     return parser
 
 
@@ -416,24 +417,24 @@ def main():
     bwall,name=bw_all(args.samplename)
     if args.plot == "region":
         if args.metavaluefile=="False":
-            All_final_value=All_value_metageneplot(bwall,name,read_bed=res,n=args.numberofgroup,No_bins=args.numberofbins,skip0=False)
+            All_final_value=All_value_metageneplot(bwall,name,read_bed=res,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=False)
             if eval(args.skip0) ==True:
                 no_group = All_final_value.pop(0)
         if args.metavaluefile=="True":
             All_final_value=readAllFinalValue(name)
             if eval(args.skip0) ==True:
                 no_group = All_final_value.pop(0)
-        metageneplot(All_final_value,name,n=args.numberofgroup,No_bins=args.numberofbins,skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
+        metageneplot(All_final_value,name,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
     if args.plot == "site":
         if args.metavaluefile=="False":
-            All_final_value=All_value_metapointplot(bwall,name,read_bed=res,n=args.numberofgroup, posname=args.posname, bp=args.basepair, No_bins=args.numberofbins,skip0=False)
+            All_final_value=All_value_metapointplot(bwall,name,read_bed=res,n=int(args.numberofgroup), posname=args.posname, bp=int(args.basepair), No_bins=int(args.numberofbins),skip0=False)
             if eval(args.skip0) ==True:
                 no_group = All_final_value.pop(0)
         if args.metavaluefile=="True":
             All_final_value=readAllFinalValue(name)
             if eval(args.skip0) ==True:
                 no_group = All_final_value.pop(0)
-        metapointplot(All_final_value,name,n=args.numberofgroup,posname=args.posname, bp=args.basepair,No_bins=args.numberofbins,skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
+        metapointplot(All_final_value,name,n=int(args.numberofgroup),posname=args.posname, bp=int(args.basepair),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
     tend = time.time()
     #print(HowManyTime(tbegin,tend))
 

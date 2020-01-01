@@ -106,6 +106,10 @@ def scatterplot(All_value,name,plot="scatter",context="CG",target="Gene_Body",co
 			while corr=="pearson" or corr=="spearman" or corr=="leastSquares": 
 				if corr == "pearson":
 					rho, pval = scipy.stats.pearsonr(ar[:,0], ar[:,1])
+					if plot=="scatter":
+						slope, intercept, rhoooo, pvallll, std_err = scipy.stats.linregress(ar[:,0], ar[:,1])
+						plt.plot(ar[:,0],intercept+slope*ar[:,0],"black",linewidth=1.8) #"darkblue"
+					#print "pearson",rho, pval
 				if corr == "spearman":
 					rho, pval = scipy.stats.spearmanr(ar[:,0], ar[:,1],axis=0) 
 				plt.text(max(ar[:,0]),ylimit*0.95,"R = %-2.3f\nP = %-2.2e"%(rho,pval),fontsize=textsize,horizontalalignment='right',verticalalignment='top')

@@ -18,6 +18,8 @@ import subprocess
 import pyBigWig
 import time
 import os, sys
+import warnings
+warnings.filterwarnings('ignore')
 
 
 def get_parser():
@@ -89,7 +91,7 @@ def cgmap2bwbz(name,cgfile,cutoff):
     bwall["CHG"]=bw_CHG
     bwall["CHH"]=bw_CHH
     print "finish create bw file"
-    return cgmap_cutoff,bwall,bzfile
+    return cgmap_cutoff,bwall
 
 
 
@@ -197,9 +199,9 @@ def RunMethGeneBw(bwall,read_bed):
             Meth_value_mean=AverageMethGeneBW(bwall,read_bed.iloc[j,0],read_bed.iloc[j,1],read_bed.iloc[j,2])
             s1 = list((read_bed.iloc[j,3],Meth_value_mean["CG"],Meth_value_mean["CHG"],Meth_value_mean["CHH"]))
             df1_list.append(s1)
-            print j, s1
+            #print j, s1
         except:
-            print j  ###there are Pt
+            #print j  ###there are Pt
             pass
     df1 = df1.append(df1_list, ignore_index=True)
     df1.columns=['gene_ID','Meth_value_mean_CG',"Meth_value_mean_CHG","Meth_value_mean_CHH"]
@@ -267,7 +269,7 @@ def Exp(name, exp):
 
 def WholeProcess(name, cgmap, cutoff, exp, gb_bed, pmt_bed, exon_bed, intron_bed):
     t7 = time.time()
-    cgmap_cutoff,bwall,bzfile=cgmap2bwbz(name,cgmap,cutoff) 
+    cgmap_cutoff,bwall=cgmap2bwbz(name,cgmap,cutoff) 
     exp = Exp(name,exp)
     t8 = time.time()
     GeneMeth=RunMethGeneBw(bwall,gb_bed)

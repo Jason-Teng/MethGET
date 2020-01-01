@@ -1,6 +1,5 @@
 # coding=UTF-8
 
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt 
@@ -18,7 +17,6 @@ import scipy
 import seaborn as sns
 import warnings
 sns.set_style("darkgrid")
-
 warnings.filterwarnings('ignore')
 
 def get_parser():
@@ -31,13 +29,13 @@ def get_parser():
     group1.add_argument("-c","--context",type=str,default="CG",choices=["CG","CHG","CHH"],help="choose the context of methylation, default is CG")
     group1.add_argument("-t","--target",type=str,default="Promoter",choices=["Promoter", "Gene_Body","Exon","Intron"],help="choose the target region of methylation, default is Promoter")
     group2 = parser.add_argument_group('Important general arguments')
-    group2.add_argument("-mthr","--meththreshold",default="auto",help="set cutoff of differential methylated genes. default 'auto' uses Δ methylation, CG:10, CHG:1, CHH:1")
-    group2.add_argument("-ethr","--expthreshold",default=1.0,type=float,help="set cutoff to identify genes that have expression changes, default uses Δ expression log2FC is 1")
+    group2.add_argument("-mthr","--meththreshold",default="auto",help="set cutoff of differential methylated genes. default 'auto' uses changes of methylation, CG:10, CHG:1, CHH:1")
+    group2.add_argument("-ethr","--expthreshold",default=1.0,type=float,help="set cutoff to identify genes that have expression changes, default uses expression changes: log2FC is 1")
     group2.add_argument("-mmax","--mmax",default=100,type=float,help="set the max methylation value for heatmap, default is 100")
     group2.add_argument("-emax","--emax",default=20,type=float,help="set the max expression value for heatmap, default is 20")
     #group2.add_argument("-ad","--addGEvalue",default=1.0,type=float,help="add a small value on gene expression value to calculate the log2FC, default is 1")
     group4 = parser.add_argument_group('Graphing arguments')
-    group4.add_argument("--fontsize",default=1.2,type=int,help="fontsize")
+    group4.add_argument("--fontsize",default=1.2,type=float,help="fontsize, default is 1.2")
     return parser
 
 
@@ -159,8 +157,8 @@ def heatmap(Samplelist, dropres, selectMeth, selectMethExp, context="CG",target=
                 selectMethExp["%smethmean"%(treatment[1])]=selectMethExp["%smethmean"%(treatment[1])]*(100.0/maxmeth)
             sns.set(font_scale=fontsize)
             ForHeatmapPlot = selectMethExp.iloc[:,1:].copy()
-            ForHeatmapPlot.columns = ["gene_ID","ctrl_meth", "ctrl_exp","trt_meth","trt_exp","Δmethylation","expression","var"]
-            p=sns.clustermap(ForHeatmapPlot[["ctrl_meth","trt_meth","ctrl_exp", "trt_exp" ]],vmin=0,vmax=100,col_cluster=False,yticklabels=False)
+            ForHeatmapPlot.columns = ["gene_ID","%s_meth"%(treatment[0]), "%s_exp"%(treatment[0]),"%s_meth"%(treatment[1]),"%s_exp"%(treatment[1]),"Δmethylation","expression","var"]
+            p=sns.clustermap(ForHeatmapPlot[["%s_meth"%(treatment[0]),"%s_meth"%(treatment[1]),"%s_exp"%(treatment[0]), "%s_exp"%(treatment[1])]],vmin=0,vmax=100,col_cluster=False,yticklabels=False)
             ForHeatmapPlot.reset_index(inplace=True)
             roworder=p.dendrogram_row.reordered_ind
             redata=selectMeth.reindex(roworder)
@@ -171,6 +169,8 @@ def heatmap(Samplelist, dropres, selectMeth, selectMethExp, context="CG",target=
             heatmaptablename = "heatmap_rankgenes.txt" 
             redata.iloc[:,1:-1].to_csv(i + "_" + j +"_"+ heatmaptablename, sep="\t",index=False, header=True)
             return heatmapplotname,heatmaptablename,redata
+
+
 
 def main():
     parser = get_parser()

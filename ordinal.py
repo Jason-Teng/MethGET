@@ -40,12 +40,12 @@ def get_parser():
     group2.add_argument("-smoo","--smooth_N",default=500,type=int,help="set the number of ticks to average when drawing the fitting curve, default is 500")
     group2.add_argument("-ylim","--ylimit",default="False",help="numeric zoom in the DNA methylation level to clearly understand the distribution")
     group4 = parser.add_argument_group('Graphing arguments')
-    group4.add_argument("--dotsize",default=20,type=int,help="dotsize")
-    group4.add_argument("--textsize",default=25,type=int,help="textsize")
-    group4.add_argument("--ticksize",default=15,type=int,help="ticksize")
-    group4.add_argument("--labelsize",default=25,type=int,help="labelsize")
-    group4.add_argument("--titlesize",default=25,type=int,help="titlesize")
-    group4.add_argument("--legendsize",default=20,type=int,help="legendsize")
+    group4.add_argument("--dotsize",default=20,type=int,help="dotsize, default is 20")
+    group4.add_argument("--textsize",default=25,type=int,help="textsize, default is 25")
+    group4.add_argument("--ticksize",default=15,type=int,help="ticksize, default is 15")
+    group4.add_argument("--labelsize",default=25,type=int,help="labelsize,, default is 25")
+    group4.add_argument("--titlesize",default=25,type=int,help="titlesize, default is 25")
+    group4.add_argument("--legendsize",default=20,type=int,help="legendsize, default is 20")
     return parser
 
 
@@ -82,7 +82,7 @@ def szooth(x,bin):
 
 
 
-def rankscatter(All_value,name,plot="scatter",context="CG",target="Gene Body",threshold=2000,skip0=False,RPKM0="on",showscatterplot=True,ylimit=False,smoothline=True,smooth_N=500,figuresize=(11,8),dotsize=30,textsize=20,ticksize=15,labelsize=20,titlesize=20,legendsize=20):
+def rankscatter(All_value,name,plot="scatter",context="CG",target="Gene Body",threshold=2000,skip0=False,RPKM0="on",showscatterplot=True,ylimit=False,smoothline=True,smooth_N=500,figuresize=(11,8),dotsize=30,textsize=20,ticksize=15,labelsize=25,titlesize=25,legendsize=20):
     con=[]
     con.append(context)
     tar=[]
