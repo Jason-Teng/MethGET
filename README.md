@@ -36,9 +36,9 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 ```
 	$ pip install numpy
 	$ pip install pandas
-	$ pip install matplolib
+	$ pip install matplotlib
 	$ pip install seaborn
-	$ pip install math
+	$ pip install maths
 	$ pip install scipy
 	$ pip install argparse
 	$ pip install pyBigWig
