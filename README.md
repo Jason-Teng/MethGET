@@ -70,7 +70,7 @@ Here is the [example data](http://140.109.56.62:8003/Downloadexample) (322MB) to
 >  -f {bismark,bsmap,methylpy,methimpute}, --format {bismark,bsmap,methylpy,methimpute}
 >                        the type of file to CGmap
 >```
->>Example for preprocess:
+>>Example for comverting methylation calls to CGmap.gz:
 >>```
 >># bismark to CGmap.gz
 >>python methcalls2CGmap.py -n CX_report.txt.gz -f bismark
