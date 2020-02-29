@@ -133,6 +133,10 @@ General options:
                         input gene annotation file
   -c CUTOFF, --cutoff CUTOFF
                         minimum cytosines that are covered by reads
+  --TE {True,False}     The input GTF file is TE GTF. The TE methylation each
+                        gene will be calculated in GeneMean.txt. The TE
+                        analyses can be conducted if the target region is
+                        'Gene_Body'
 ```
 **Example for preprocess:**
 ```
