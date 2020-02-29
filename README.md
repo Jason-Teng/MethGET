@@ -41,6 +41,7 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install maths
 	$ pip install scipy
 	$ pip install argparse
+	$ pip install sklearn
 	$ pip install pyBigWig
 ```
 # <a name="MethGETInput"></a>MethGET Input
@@ -53,6 +54,26 @@ chr1    G       13538   CG      CG      0.6     6       10
 chr1    G       13539   CHG     CC      0.0     0       9
 chr1    G       13541   CHH     CA      0.0     0       9
 chr1    G       13545   CHH     CA      0.0     0       8
+```
+>> The methylation calling files from other aligners/callers, MethGET provides a python script (methcalls2CGmap.py) to convert them to CGmap.gz.
+```
+usage: methcalls2CGmap.py [-h] [-n FILENAME]
+                          [-f {bismark,bsmap,methylpy,methimpute}]
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+Input format:
+  -n FILENAME, --filename FILENAME
+                        the file name that the users want to convert to CGMap
+                        format
+  -f {bismark,bsmap,methylpy,methimpute}, --format {bismark,bsmap,methylpy,methimpute}
+                        the type of file to CGmap
+```
+**Example for preprocess:**
+```
+# bismark to CGmap.gz
+python methcalls2CGmap.py -n CX_report.txt.gz -f bismark
 ```
 > 2. Gene Expression File
 >> Tab-delimited text ﬁle: contain the gene names and gene expression values.
