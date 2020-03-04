@@ -1,6 +1,6 @@
 # MethGET
 
-A web-based bioinformatics software for correlating DNA methylation and gene expression. The web user-interface can be accessed through http://140.109.56.62:8003/.
+A web-based bioinformatics software for correlating DNA methylation and gene expression. The web user-interface can be accessed through https://paoyang.ipmb.sinica.edu.tw/methget.
 
 
 # Contents
