@@ -38,7 +38,6 @@ Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed
 	$ pip install pandas
 	$ pip install matplotlib
 	$ pip install seaborn
-	$ pip install maths
 	$ pip install scipy
 	$ pip install argparse
 	$ pip install sklearn
