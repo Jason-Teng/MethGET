@@ -85,7 +85,7 @@ AT1G01360       42.5391
 AT1G01370       8.28111
 ```
 > 3. Gene Annotation File
->> gene annotation in GTF file: It may be available from [ensemble FTP](https://asia.ensembl.org/info/data/ftp/index.html)
+>> gene annotation in GTF file: It may be available from [EnsemblPlant](https://plants.ensembl.org/info/website/ftp/index.html) or [ensemble FTP](https://asia.ensembl.org/info/data/ftp/index.html)
 
 ### For multiple methylomes 
 >1. Sample Description File (tab-delimited)
