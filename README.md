@@ -31,7 +31,7 @@ A web-based bioinformatics software for correlating DNA methylation and gene exp
 (Type " python -V" to see the installed version. Python2.7 could be downloaded from  http://www.python.org/download/) 
 * [ucsc-gtftogenepred](https://bioconda.github.io/recipes/ucsc-gtftogenepred/README.html)
 
-Python modules such as "numpy", "pandas", "matplotlib", and "pyBigWig" is needed. To install the packages, use the following commands on linux terminal:
+Python modules are needed. To install the packages, use the following commands on linux terminal:
 ```
 	$ pip install numpy
 	$ pip install pandas
