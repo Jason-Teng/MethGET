@@ -40,6 +40,7 @@ Python modules are needed. To install the packages, use the following commands o
 	$ pip install scipy
 	$ pip install argparse
 	$ pip install sklearn
+	$ pip install openpyxl
 	$ pip install pyBigWig
 ```
 # <a name="MethGETInput"></a>MethGET Input
