@@ -169,7 +169,7 @@ Required arguments:
   -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
                         choose the context of methylation, default 'all' is to choose them all
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
-                        choose the target region of methylation, default 'all' is to choose them all
+                        choose the genomic location of methylation, default 'all' is to choose them all
 
 Important general arguments:
   -cor {False,pearson,spearman}, --correlation {False,pearson,spearman}
@@ -221,7 +221,7 @@ Required arguments:
   -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
                         choose the context of methylation, default 'all' is to choose them all
   -t {Gene_Body,Promoter,Exon,Intron,all}, --target {Gene_Body,Promoter,Exon,Intron,all}
-                        choose the target region of methylation, default 'all' is to choose them all
+                        choose the genomic location of methylation, default 'all' is to choose them all
 
 Important general arguments:
   -re0 {True,False}, --skip0 {True,False}
@@ -283,7 +283,7 @@ Required arguments:
   -c {CG,CHG,CHH,all}, --context {CG,CHG,CHH,all}
                         choose the context of methylation, default 'all' is to choose them all
   -t {Gene_Body,Promoter,Exon,Intron,all}, --target {Gene_Body,Promoter,Exon,Intron,all}
-                        choose the target region of methylation, default 'all' is to choose them all
+                        choose the genomic location of methylation, default 'all' is to choose them all
   -nb NUMBEROFGROUP, --numberofgroup NUMBEROFGROUP
                         define how many group to seperate gene expression, default is 5
 
@@ -409,7 +409,7 @@ Required arguments:
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
                         choose the context of methylation, default is CG
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
-                        choose the target region of methylation, default is
+                        choose the genomic location of methylation, default is
                         Promoter
   -pro PROB_CUTOFF, --prob_cutoff PROB_CUTOFF
                         define the differential genes by their probrability in
@@ -478,7 +478,7 @@ Required arguments:
   -c {CG,CHG,CHH}, --context {CG,CHG,CHH}
                         choose the context of methylation, default is CG
   -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
-                        choose the target region of methylation, default is
+                        choose the genomic location of methylation, default is
                         Promoter
   -pro PROB_CUTOFF, --prob_cutoff PROB_CUTOFF
                         define the differential genes by their probrability in
