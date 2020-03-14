@@ -390,13 +390,15 @@ python metagene.py -n demo -p region -No_bins 30 -ma True
 ```
 usage: comparison.py [-h] [-s SAMPLELIST] [-c {CG,CHG,CHH}]
                      [-t {Promoter,Gene_Body,Exon,Intron,all}]
+                     [-pro PROB_CUTOFF] [-p {scatter,kernel}]
+                     [-cor {False,pearson,spearman}]
+                     [--shownumber {False,True}] [--cutoff {False,True}]
                      [-mthr METHTHRESHOLD] [-ethr EXPTHRESHOLD]
-                     [-p {scatter,kernel}] [-cor {False,pearson,spearman}]
-                     [--shownumber {False,True}] [--methmin METHMIN]
-                     [--methmax METHMAX] [--expmin EXPMIN] [--expmax EXPMAX]
-                     [--dotsize DOTSIZE] [--textsize TEXTSIZE]
-                     [--ticksize TICKSIZE] [--labelsize LABELSIZE]
-                     [--titlesize TITLESIZE] [--fontsize FONTSIZE]
+                     [--methmin METHMIN] [--methmax METHMAX] [--expmin EXPMIN]
+                     [--expmax EXPMAX] [--dotsize DOTSIZE]
+                     [--textsize TEXTSIZE] [--ticksize TICKSIZE]
+                     [--labelsize LABELSIZE] [--titlesize TITLESIZE]
+                     [--fontsize FONTSIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -409,12 +411,9 @@ Required arguments:
   -t {Promoter,Gene_Body,Exon,Intron,all}, --target {Promoter,Gene_Body,Exon,Intron,all}
                         choose the target region of methylation, default is
                         Promoter
-  -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
-                        set cutoff of differential methylated genes. default
-                        'auto' uses methylation changes, CG:10, CHG:1, CHH:1
-  -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
-                        set cutoff to identify genes that have expression
-                        changes, default uses expression changes: log2FC is 1
+  -pro PROB_CUTOFF, --prob_cutoff PROB_CUTOFF
+                        define the differential genes by their probrability in
+                        Gaussian mixture model, default is 0.000001
 
 Important general arguments:
   -p {scatter,kernel}, --plot {scatter,kernel}
@@ -425,6 +424,17 @@ Important general arguments:
   --shownumber {False,True}
                         whether to show the number of significant genes,
                         default False is not show
+
+Define anomaly genes with methylation changes and gene expression changes:
+  --cutoff {False,True}
+                        whether to use methylation and gene expression cutoff
+                        to define outliers, default is False
+  -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
+                        set cutoff of differential methylated genes. default
+                        'auto' uses methylation changes, CG:10, CHG:1, CHH:1
+  -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
+                        set cutoff to identify genes that have expression
+                        changes, default uses expression changes: log2FC is 1
   --methmin METHMIN     minimum methylation changes for x-axis
   --methmax METHMAX     maximum methylation changes for x-axis
   --expmin EXPMIN       minimum gene expression changes for y-axis
