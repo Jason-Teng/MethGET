@@ -464,8 +464,9 @@ python comparison.py -s samplelist.txt -c CG -t Promoter -cor False --shownumber
 **Usage:**
 ```
 usage: heatmap.py [-h] [-s SAMPLELIST] [-c {CG,CHG,CHH}]
-                  [-t {Promoter,Gene_Body,Exon,Intron}] [-mthr METHTHRESHOLD]
-                  [-ethr EXPTHRESHOLD] [-mmax MMAX] [-emax EMAX]
+                  [-t {Promoter,Gene_Body,Exon,Intron}] [-pro PROB_CUTOFF]
+                  [-mmax MMAX] [-emax EMAX] [--cutoff {False,True}]
+                  [-mthr METHTHRESHOLD] [-ethr EXPTHRESHOLD]
                   [--fontsize FONTSIZE]
 
 optional arguments:
@@ -479,8 +480,22 @@ Required arguments:
   -t {Promoter,Gene_Body,Exon,Intron}, --target {Promoter,Gene_Body,Exon,Intron}
                         choose the target region of methylation, default is
                         Promoter
+  -pro PROB_CUTOFF, --prob_cutoff PROB_CUTOFF
+                        define the differential genes by their probrability in
+                        Gaussian mixture model, default is '0.000001'
 
 Important general arguments:
+  -mmax MMAX, --mmax MMAX
+                        set the max methylation value for heatmap, default is
+                        100
+  -emax EMAX, --emax EMAX
+                        set the max expression value for heatmap, default is
+                        20
+
+Define anomaly genes with methylation changes and gene expression changes:
+  --cutoff {False,True}
+                        whether to use methylation and gene expression cutoff
+                        to define outliers, default is False
   -mthr METHTHRESHOLD, --meththreshold METHTHRESHOLD
                         set cutoff of differential methylated genes. default
                         'auto' uses changes of methylation, CG:10, CHG:1,
@@ -488,12 +503,6 @@ Important general arguments:
   -ethr EXPTHRESHOLD, --expthreshold EXPTHRESHOLD
                         set cutoff to identify genes that have expression
                         changes, default uses expression changes: log2FC is 1
-  -mmax MMAX, --mmax MMAX
-                        set the max methylation value for heatmap, default is
-                        100
-  -emax EMAX, --emax EMAX
-                        set the max expression value for heatmap, default is
-                        20
 
 Graphing arguments:
   --fontsize FONTSIZE   fontsize, default is 1.2
