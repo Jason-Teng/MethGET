@@ -50,7 +50,10 @@ def get_parser():
 
 
 
-def bw_all(name):#(bw_CG,bw_CHG,bw_CHH):
+def bw_all(name):
+    """
+    read the methylation bw files (CG, CHG, CHH)
+    """
     bw_CG=pyBigWig.open("%s_CG.bw"%(name))
     bw_CHG=pyBigWig.open("%s_CHG.bw"%(name))
     bw_CHH=pyBigWig.open("%s_CHH.bw"%(name))
@@ -62,26 +65,28 @@ def bw_all(name):#(bw_CG,bw_CHG,bw_CHH):
 
 
 
-
 def readAllFinalValue(name):
+    """
+    read the metagene preprocessed files by the sample name
+    """
     matrixinfo=pd.read_csv("%smetavaluefile.txt"%(name),sep="\t",header=None)
     n=len(matrixinfo[0].unique())-1
+    # preparing for all values for metagene plot
     All_final_value=np.zeros(len(matrixinfo[0].unique()))
     All_final_value=list(All_final_value)
     for gr in range(len(matrixinfo[0].unique())):
         All_final_value[gr]={}
         for con in ["CG","CHG","CHH"]:
-            info=matrixinfo.loc[(matrixinfo[0]==matrixinfo[0].unique()[gr]) & (matrixinfo[1]==con)]
-            info=info.values.tolist()[0][2:]
+            info = matrixinfo.loc[(matrixinfo[0]==matrixinfo[0].unique()[gr]) & (matrixinfo[1]==con)]
+            info = info.values.tolist()[0][2:]
             All_final_value[gr][con]=info
     return All_final_value
 
 
 
-
 def AverageMethGeneBW(bwall,chr,left,right):
     """
-    get target methylation site from CGmap
+    get target methylation site and calculate the avarage of the region
     """
     Meth_value_mean={}
     for i in ["CG","CHG","CHH"]:
@@ -94,80 +99,84 @@ def AverageMethGeneBW(bwall,chr,left,right):
 
 def Metagenebw(bwall,name,chr,sta,end,dir,No_bins):
     """
-    calculate average methylation of each bin
+    calculate average methylation of each bin in 'region' plot
     """
     a=No_bins
-    if dir=="+":
-        length=end-sta 
+    if dir=="+": # + strand
+        length=end-sta #gene length
         upstream=sta-length*0.5
         downstream=end+length*0.5 
-        bins=float((downstream - upstream)/a)#bin's length
+        bins=float((downstream - upstream)/a) #bin's length
         All_position=np.zeros(a+1) 
         All_position[0]=upstream 
-        for k in range(1,a+1):
+        for k in range(1,a+1): # the positions of every bins
             All_position[k]=All_position[k-1]+bins
         left=All_position[0]
         right=All_position[a]
-    else:
+    else: # - strand
         length=end-sta #gene length
         upstream=end+length*0.5
         downstream=sta-length*0.5
-        bins=float((upstream - downstream)/a)#bin's length
+        bins=float((upstream - downstream)/a) #bin's length
         All_position=np.zeros(a+1) 
         All_position[0]=upstream 
         for k in range(1,a+1):
             All_position[k]=All_position[k-1]-bins
         left=All_position[a]
         right=All_position[0]
-    Meth_value_mean={}
+    Meth_value_mean={} # calculate the average methylation of every bins in CG, CHG, CHH
     for con in ["CG","CHG","CHH"]:
         Meth_value_mean["%s"%(con)]=np.zeros(a)
-        if dir=="+":
+        if dir=="+": # calculate if the strand is '+'
             for i in range(0,a):  
                 Meth_value_mean["%s"%(con)][i]=AverageMethGeneBW(bwall,chr,int(All_position[i])-1,int(All_position[i+1])-1)["%s"%(con)]  
-        else:
+        else: # calculate if the strand is '-'
             for i in range(0,a):
                 Meth_value_mean["%s"%(con)][i]=AverageMethGeneBW(bwall,chr,int(All_position[i+1]),int(All_position[i]))["%s"%(con)] 
     return Meth_value_mean
 
 
 
-def All_value_metageneplot(bwall,name,read_bed,n=5,No_bins=30,skip0=False):    
-    No_bins = No_bins*2
+def All_value_metageneplot(bwall,name,read_bed,n=5,No_bins=30,skip0=False):
+    """
+    all values for plotting metagene plot (region)
+    """
+    No_bins = No_bins*2 # genebody + 0.5 upstream + 0.5 downstream
+    # name of the expressed groups
     order=["1st","2nd","3rd"]
     for i in range(4,n+1):
         order.append("%dth"%(i)) 
-    groupname=order[:n]   
-    no_exp=read_bed.loc[read_bed["RPKM"]==0] 
-    other_exp=read_bed.loc[read_bed["RPKM"]!=0] 
-    sort_other_exp=other_exp.sort_values(by='RPKM')
-    sepvalue=[0]  
+    groupname=order[:n]
+    no_exp=read_bed.loc[read_bed["RPKM"]==0] # bed for unexpressed genes
+    other_exp=read_bed.loc[read_bed["RPKM"]!=0]  # bed for expressed genes
+    sort_other_exp=other_exp.sort_values(by='RPKM') # sort genes by expression value
+    sepvalue=[0]  # the value for the range of each group
     groups={} 
     for k in range(n):
         sepvalue.append(sort_other_exp.iloc[(len(sort_other_exp)*(k+1)/n)-1,4]) 
-        groups[order[k]]=sort_other_exp.loc[(sort_other_exp["RPKM"]>sepvalue[k]) & (sort_other_exp["RPKM"]<=sepvalue[k+1])]
-    """
-    create final value
-    """
+        groups[order[k]]=sort_other_exp.loc[(sort_other_exp["RPKM"]>sepvalue[k]) & (sort_other_exp["RPKM"]<=sepvalue[k+1])] # the data for each expression groups
+    ### create final value
     All_final_value=[]
+    ## the metagene data for unexpressed genes
     if skip0==False:
-        groupname.insert(0,"no")
+        groupname.insert(0,"no") 
         no_exp_All_MethLevel={}
         no_exp_Final_value={} 
         for con in ["CG","CHG","CHH"]:
             no_exp_All_MethLevel["%s"%(con)]=np.zeros((len(no_exp),No_bins))
             for j in range(1,len(no_exp)+1):    
                 try:
-                    no_exp_All_MethLevel["%s"%(con)][j-1,:]=Metagenebw(bwall,name,no_exp.iloc[j-1,0],no_exp.iloc[j-1,1],no_exp.iloc[j-1,2],no_exp.iloc[j-1,5],No_bins)["%s"%(con)]
+                    no_exp_All_MethLevel["%s"%(con)][j-1,:]=Metagenebw(bwall,name,no_exp.iloc[j-1,0],no_exp.iloc[j-1,1],no_exp.iloc[j-1,2],no_exp.iloc[j-1,5],No_bins)["%s"%(con)] # the metagene data for each genes
                     #print no_exp.iloc[j-1,:], j
                 except:
                     pass
                     #print(no_exp.iloc[j-1,:], "error@no", j)
             no_exp_Final_value["%s"%(con)]=np.zeros(No_bins)
-            no_exp_All_MethLevel["%s"%(con)]=np.ma.masked_array(no_exp_All_MethLevel["%s"%(con)],np.isnan(no_exp_All_MethLevel["%s"%(con)]))
+            no_exp_All_MethLevel["%s"%(con)]=np.ma.masked_array(no_exp_All_MethLevel["%s"%(con)],np.isnan(no_exp_All_MethLevel["%s"%(con)])) # mask the nan value for average
             for m in range(0,No_bins):
-                no_exp_Final_value["%s"%(con)][m]=no_exp_All_MethLevel["%s"%(con)][:,m].mean()*100
+                no_exp_Final_value["%s"%(con)][m]=no_exp_All_MethLevel["%s"%(con)][:,m].mean()*100 # the average methylation level in each bins for plotting 
         All_final_value.append(no_exp_Final_value)
+    ## the metagene data for each expressed groups of genes
     for i in range(n):  
         other_exp_All_MethLevel={}
         other_exp_Final_value={}
@@ -175,7 +184,7 @@ def All_value_metageneplot(bwall,name,read_bed,n=5,No_bins=30,skip0=False):
             other_exp_All_MethLevel["%s"%(con)]=np.zeros((len(groups[order[i]]),No_bins))
             for j in range(1,len(groups[order[i]])+1):  
                 try:
-                    other_exp_All_MethLevel["%s"%(con)][j-1,:]=Metagenebw(bwall,name,groups[order[i]].iloc[j-1,0],groups[order[i]].iloc[j-1,1],groups[order[i]].iloc[j-1,2],groups[order[i]].iloc[j-1,5],60)["%s"%(con)]
+                    other_exp_All_MethLevel["%s"%(con)][j-1,:]=Metagenebw(bwall,name,groups[order[i]].iloc[j-1,0],groups[order[i]].iloc[j-1,1],groups[order[i]].iloc[j-1,2],groups[order[i]].iloc[j-1,5],No_bins)["%s"%(con)]
                     #print groups[order[i]].iloc[j-1,:], j
                 except:
                     pass
@@ -185,6 +194,7 @@ def All_value_metageneplot(bwall,name,read_bed,n=5,No_bins=30,skip0=False):
             for m in range(0,No_bins):
                 other_exp_Final_value["%s"%(con)][m]=other_exp_All_MethLevel["%s"%(con)][:,m].mean()*100
         All_final_value.append(other_exp_Final_value)
+    # save the matrix of the methylation level of each bins
     matrixinfo=pd.DataFrame()
     matrix = []
     for gr in range(len(groupname)):
@@ -202,13 +212,18 @@ def All_value_metageneplot(bwall,name,read_bed,n=5,No_bins=30,skip0=False):
 
 
 def metageneplot(All_final_value,name,n=5,No_bins=30,skip0=False,yaxis="auto",figuresize=(8,6),xticksize=20,yticksize=15,labelsize=20,titlesize=20,legendsize=15):
+    """
+    graphing metagene plot 'region' plot
+    """
     No_bins = No_bins*2
+    # name of groups
     order=["1st","2nd","3rd"]
     for i in range(4,n+1):
         order.append("%dth"%(i))  
     groupname=order[:n]
     if skip0==False:
         groupname.insert(0,"no")   
+    # plot the average methylation level of different expressed groups
     for con in ["CG","CHG","CHH"]:
         maxall=[]
         for j in range(len(All_final_value)): 
@@ -217,7 +232,7 @@ def metageneplot(All_final_value,name,n=5,No_bins=30,skip0=False,yaxis="auto",fi
         highest_value=max(maxall)
         plt.figure(figsize=figuresize)
         plt.subplot(111)
-        ### ylim(set the value of y lim) ###
+        # set ylim
         ylimit=highest_value*3/2
         if ylimit>100:  
             plt.ylim((0, 100))
@@ -227,6 +242,7 @@ def metageneplot(All_final_value,name,n=5,No_bins=30,skip0=False,yaxis="auto",fi
         l2=plt.axvline(x=No_bins*0.75, color='lightgray',linestyle='--')
         color=cm.rainbow(np.linspace(0.6,0.0,len(All_final_value)))
         color = color.tolist()
+        # the line plot for the methylation level of different expressed groups
         for j in range(len(All_final_value)):
             plt.plot(All_final_value[j]["%s"%(con)],color=color[j],label=groupname[j])
         plt.legend(loc='upper right',fontsize=legendsize)
@@ -234,26 +250,29 @@ def metageneplot(All_final_value,name,n=5,No_bins=30,skip0=False,yaxis="auto",fi
         plt.xticks([No_bins*0.125, No_bins*0.5,No_bins*0.875 ],[r'$upstream$', r'$gene$', r'$downstream$'],fontsize=xticksize) 
         plt.yticks(fontsize=yticksize)
         plt.ylabel('Methylation Level (%)',fontsize=labelsize)
-        plt.savefig('%s_meta_gene_plot_%s_%dexpress.png'%(name,con,n),dpi=300)
+        plt.savefig('%s_meta_gene_plot_%s_%dexpress.png'%(name,con,n),dpi=300) # save figure
         #plt.show()
 
 
 
 
 def Metapointbw(bwall,chr,pos,dir,bp,No_bins):
-    totalBin=2*No_bins 
+    """
+    calculate average methylation of each bin in 'site' plot
+    """
+    totalBin=2*No_bins # upstream + downstream 
     if dir=="+":
-        upstream=pos-bp#upstream position
+        upstream=pos-bp #upstream position
         downstream=pos+bp #downstream position
-        bins=float(bp/No_bins)#bin's length
+        bins=float(bp/No_bins) #bin's length
         All_position=np.zeros(totalBin+1) 
         All_position[0]=upstream
         for k in range(1,totalBin+1):
-            All_position[k]=All_position[k-1]+bins
+            All_position[k]=All_position[k-1]+bins # the positions of every bins
         left=All_position[0] 
         right=All_position[totalBin]
     else:
-        #length=end-sta #gene length
+        # the '-' strand with opposite direction
         upstream=pos+bp
         downstream=pos-bp
         bins=float(bp/No_bins) #bin's length
@@ -265,11 +284,11 @@ def Metapointbw(bwall,chr,pos,dir,bp,No_bins):
         right=All_position[0]
     Meth_value_mean={} 
     for con in ["CG","CHG","CHH"]: 
-        Meth_value_mean["%s"%(con)]=np.zeros(totalBin)
-        if dir=="+":
+        Meth_value_mean["%s"%(con)]=np.zeros(totalBin) # calculate the average methylation of every bins in CG, CHG, CHH
+        if dir=="+": # '+' strand
             for i in range(0,totalBin):
-                Meth_value_mean["%s"%(con)][i]=AverageMethGeneBW(bwall,chr,int(All_position[i])-1,int(All_position[i+1])-1)["%s"%(con)]
-        else:
+                Meth_value_mean["%s"%(con)][i]=AverageMethGeneBW(bwall,chr,int(All_position[i])-1,int(All_position[i+1])-1)["%s"%(con)] # metagene for each bins (site analyses)
+        else: # '-' strand
             for i in range(0,totalBin):
                 Meth_value_mean["%s"%(con)][i]=AverageMethGeneBW(bwall,chr,int(All_position[i+1]),int(All_position[i]))["%s"%(con)]
     return Meth_value_mean
@@ -277,14 +296,17 @@ def Metapointbw(bwall,chr,pos,dir,bp,No_bins):
 
 
 
-
-
 def All_value_metapointplot(bwall,name,read_bed,n=5,posname="TSS",bp=2000,No_bins=10,skip0=False):
-    totalBin=2*No_bins
+    """
+    all values for plotting metagene plot (site)
+    """
+    totalBin=2*No_bins # upstream + downstream 
+    # name of groups
     order=["1st","2nd","3rd"]
     for i in range(4,n+1):
         order.append("%dth"%(i))  
     groupname=order[:n]
+    # Bed for each expression group
     no_exp=read_bed.loc[read_bed["RPKM"]==0]
     other_exp=read_bed.loc[read_bed["RPKM"]!=0]
     sort_other_exp=other_exp.sort_values(by='RPKM')
@@ -293,33 +315,34 @@ def All_value_metapointplot(bwall,name,read_bed,n=5,posname="TSS",bp=2000,No_bin
     for k in range(n):
         sepvalue.append(sort_other_exp.iloc[(len(sort_other_exp)*(k+1)/n)-1,4])
         groups[order[k]]=sort_other_exp.loc[(sort_other_exp["RPKM"]>sepvalue[k]) & (sort_other_exp["RPKM"]<=sepvalue[k+1])]
-    """
-    create final value
-    """
+    ### create final value
     All_final_value=[]
+    # process the group of no expression 
     if skip0==False:
         groupname.insert(0,"no")
         no_exp_All_MethLevel={}
         no_exp_Final_value={}
         for con in ["CG","CHG","CHH"]:
             no_exp_All_MethLevel["%s"%(con)]=np.zeros((len(no_exp),totalBin))
-            for j in range(1,len(no_exp)+1):    
+            for j in range(1,len(no_exp)+1):   
+                # transcription start site
                 if posname=="TSS":
                     pos=no_exp.iloc[j-1,1]
+                # transcription end site
                 if posname=="TES":
                     pos=no_exp.iloc[j-1,2]
                 try:
-                    no_exp_All_MethLevel["%s"%(con)][j-1,:]=Metapointbw(bwall,no_exp.iloc[j-1,0],pos,no_exp.iloc[j-1,5],bp,No_bins)["%s"%(con)]
+                    no_exp_All_MethLevel["%s"%(con)][j-1,:]=Metapointbw(bwall,no_exp.iloc[j-1,0],pos,no_exp.iloc[j-1,5],bp,No_bins)["%s"%(con)] # the avarage of methylation of each bin in every genes
                     #print no_exp.iloc[j-1,:], j
                 except:
                     pass
                     #print no_exp.iloc[j-1,:], "error@no", j
             no_exp_Final_value["%s"%(con)]=np.zeros(totalBin)
-            #print no_exp_Final_value["%s"%(con)]
-            no_exp_All_MethLevel["%s"%(con)]=np.ma.masked_array(no_exp_All_MethLevel["%s"%(con)],np.isnan(no_exp_All_MethLevel["%s"%(con)]))
+            no_exp_All_MethLevel["%s"%(con)]=np.ma.masked_array(no_exp_All_MethLevel["%s"%(con)],np.isnan(no_exp_All_MethLevel["%s"%(con)])) # mask the nan value for average
             for m in range(0,totalBin):
-                no_exp_Final_value["%s"%(con)][m]=no_exp_All_MethLevel["%s"%(con)][:,m].mean()*100
+                no_exp_Final_value["%s"%(con)][m]=no_exp_All_MethLevel["%s"%(con)][:,m].mean()*100 ## the average methylation level in each bins for plotting 
         All_final_value.append(no_exp_Final_value)
+    # process groups of expressed genes
     for i in range(n):  
         other_exp_All_MethLevel={}
         other_exp_Final_value={}
@@ -341,6 +364,7 @@ def All_value_metapointplot(bwall,name,read_bed,n=5,posname="TSS",bp=2000,No_bin
             for m in range(0,totalBin):
                 other_exp_Final_value["%s"%(con)][m]=other_exp_All_MethLevel["%s"%(con)][:,m].mean()*100
         All_final_value.append(other_exp_Final_value)
+    # matrix for 'site' analyses output
     matrixinfo=pd.DataFrame()
     matrix = []
     for gr in range(len(groupname)):
@@ -350,37 +374,44 @@ def All_value_metapointplot(bwall,name,read_bed,n=5,posname="TSS",bp=2000,No_bin
             info.insert(0,"%s"%(groupname[gr]))
             matrix.append(info)
     matrixinfo = matrixinfo.append(matrix)
-    matrixinfo.to_csv("%smetavaluefile.txt"%(name),header=False,index=False,sep="\t")
+    matrixinfo.to_csv("%smetavaluefile.txt"%(name),header=False,index=False,sep="\t") # save the matrix
     return All_final_value
 
 
 
 
-def metapointplot(All_final_value, name, posname="TSS",n=5,bp=2000,No_bins=10,skip0=False,yaxis="auto",figuresize=(8,6),xticksize=20,yticksize=15,labelsize=20,titlesize=20,legendsize=15):
+def metapointplot(All_final_value, name, posname="TSS", n=5, bp=2000, No_bins=10, skip0=False, yaxis="auto", figuresize=(8,6), xticksize=20, yticksize=15, labelsize=20, titlesize=20, legendsize=15):
+    """
+    generating the metage plot of 'site' analyses
+    """
+    # name of groups
     order=["1st","2nd","3rd"]
     for i in range(4,n+1):
         order.append("%dth"%(i))
     groupname=order[:n]
+    # the name of unexpressed group
     if skip0==False:
         groupname.insert(0,"no")
+    # generate 
     for i in ["CG","CHG","CHH"]:
-        #### max ####
+        plt.figure(figsize=figuresize)
+        plt.subplot(111)
+        # set the limit of y
         maxall=[]
         for j in range(len(All_final_value)):  
             All_final_value[j]
             maxall.append(max(All_final_value[j]["%s"%(i)]))
         highest_value=max(maxall)
-        plt.figure(figsize=figuresize)
-        plt.subplot(111)
-        ### ylim(set the value of y lim) ###
         ylimit=highest_value*3/2
         if ylimit>100:
             plt.ylim((0, 100))
         else:
             plt.ylim((0, ylimit))
+        ### graphing adjustment
         l1=plt.axvline(x=No_bins-0.5, color='lightgray',linestyle='--')
         color=cm.rainbow(np.linspace(0.6,0.0,n+1))
         color = color.tolist()
+        # the line plot for the methylation level of different expressed groups
         for j in range(len(All_final_value)):
             plt.plot(All_final_value[j]["%s"%(i)],color=color[j],label=groupname[j])
         plt.legend(loc='upper right',fontsize=legendsize)
@@ -388,14 +419,15 @@ def metapointplot(All_final_value, name, posname="TSS",n=5,bp=2000,No_bins=10,sk
         plt.xticks([0,No_bins-0.5,2*No_bins-1],["-%d"%(bp),'%s'%(posname),"+%d"%(bp)],fontsize=xticksize)
         plt.yticks(fontsize=yticksize)
         plt.ylabel('Methylation Level (%)',fontsize=labelsize)
-        plt.savefig('%s_meta_%s_plot_%s_%dexpress.png'%(name,posname,i,n),dpi = 300)
+        plt.savefig('%s_meta_%s_plot_%s_%dexpress.png'%(name,posname,i,n),dpi = 300) # save the figure
         #plt.show()
 
 
 
-
-
 def HowManyTime(tbegin,tend):
+    """
+    to calculate the time to evaluate the speed
+    """
     tTotal=tend-tbegin
     tsec=tTotal%60
     ttolmin=tTotal//60
@@ -407,36 +439,37 @@ def HowManyTime(tbegin,tend):
 
 
 def main():
-    tbegin = time.time() 
+    tbegin = time.time() # start time
     parser = get_parser()
     args = parser.parse_args()
-    exp=pd.read_csv("%s_exp.txt"%(args.samplename),sep="\t",names=["gene_ID","RPKM"])
-    read_bed=pd.read_csv('gb.bed', sep='\t',names=["chr","left","right","gene_ID","RPKM","direction"],dtype={"chr":str})
-    res=pd.merge(read_bed[["chr","left","right","gene_ID","direction"]],exp,on=["gene_ID"]) ##how='inner'
-    res=res[["chr","left","right","gene_ID","RPKM","direction"]]
-    bwall,name=bw_all(args.samplename)
-    if args.plot == "region":
-        if args.metavaluefile=="False":
-            All_final_value=All_value_metageneplot(bwall,name,read_bed=res,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=False)
-            if eval(args.skip0) ==True:
-                no_group = All_final_value.pop(0)
-        if args.metavaluefile=="True":
-            All_final_value=readAllFinalValue(name)
-            if eval(args.skip0) ==True:
-                no_group = All_final_value.pop(0)
-        metageneplot(All_final_value,name,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
-    if args.plot == "site":
-        if args.metavaluefile=="False":
-            All_final_value=All_value_metapointplot(bwall,name,read_bed=res,n=int(args.numberofgroup), posname=args.posname, bp=int(args.basepair), No_bins=int(args.numberofbins),skip0=False)
-            if eval(args.skip0) ==True:
-                no_group = All_final_value.pop(0)
-        if args.metavaluefile=="True":
-            All_final_value=readAllFinalValue(name)
-            if eval(args.skip0) ==True:
-                no_group = All_final_value.pop(0)
-        metapointplot(All_final_value,name,n=int(args.numberofgroup),posname=args.posname, bp=int(args.basepair),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize)
-    tend = time.time()
-    #print(HowManyTime(tbegin,tend))
+    exp=pd.read_csv("%s_exp.txt"%(args.samplename),sep="\t",names=["gene_ID","RPKM"]) # read expression file
+    read_bed=pd.read_csv('gb.bed', sep='\t',names=["chr","left","right","gene_ID","RPKM","direction"],dtype={"chr":str}) # read gene body bed
+    res=pd.merge(read_bed[["chr","left","right","gene_ID","direction"]],exp,on=["gene_ID"]) ## merge the expression value into bed
+    res=res[["chr","left","right","gene_ID","RPKM","direction"]] # combine to 6 column bed
+    bwall,name=bw_all(args.samplename) # read bw file
+    if args.plot == "region": # region plot
+        if args.metavaluefile=="False": # preprocess metagene
+            All_final_value=All_value_metageneplot(bwall,name,read_bed=res,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=False) # get the value for plotting
+            if eval(args.skip0) ==True: 
+                no_group = All_final_value.pop(0) # remove the name of no group
+        if args.metavaluefile=="True": # after preprocessing metagene
+            All_final_value=readAllFinalValue(name) # read the preprocessed metagene matrix
+            if eval(args.skip0) ==True: 
+                no_group = All_final_value.pop(0) # remove the name of no group
+        metageneplot(All_final_value,name,n=int(args.numberofgroup),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize) # generate region plot
+    if args.plot == "site": # site plot
+        if args.metavaluefile=="False": # preprocess metagene
+            All_final_value=All_value_metapointplot(bwall,name,read_bed=res,n=int(args.numberofgroup), posname=args.posname, bp=int(args.basepair), No_bins=int(args.numberofbins),skip0=False) # get the value for plotting
+            if eval(args.skip0) ==True: 
+                no_group = All_final_value.pop(0) # remove the name of no group
+        if args.metavaluefile=="True": # after preprocessing metagene
+            All_final_value=readAllFinalValue(name) # read the preprocessed metagene matrix
+            if eval(args.skip0) ==True: 
+                no_group = All_final_value.pop(0) # remove the name of no group
+        metapointplot(All_final_value,name,n=int(args.numberofgroup),posname=args.posname, bp=int(args.basepair),No_bins=int(args.numberofbins),skip0=eval(args.skip0),yaxis="auto",figuresize=(8,6),xticksize=args.xticksize,yticksize=args.yticksize,labelsize=args.labelsize,titlesize=args.labelsize,legendsize=args.legendsize) # generate site plot
+    tend = time.time() # end time
+    print(HowManyTime(tbegin,tend)) # total time for analyses
+
 
 
 
