@@ -36,22 +36,21 @@ def get_parser():
     group3 = parser.add_argument_group('General options')
     group3.add_argument("-g","--gtffile",type=str,help="input gene annotation file")
     group3.add_argument("-c","--cutoff",type=int,default=5, help="minimum cytosines that are covered by reads")
-    group3.add_argument("--TE",default="False",choices=["True","False"], help="The input GTF file is TE GTF. The TE methylation each gene will be calculated in GeneMean.txt. The TE analyses can be conducted if the genomic location is 'Gene_Body'")
+    group3.add_argument("--TE",default="False",choices=["True","False"], help="The input GTF file is TE GTF. The TE methylation each gene will be calculated in GeneMean.txt. The TE analyses can be conducted if the target region is 'Gene_Body'")
     return parser
 
 
-##########     preprocess methylation    ##########
 
 def cgmap2bwbz(name,cgfile,cutoff):
     """
-    cut the depth of cgmap, and save into bw file (CG, CHG, CHH)
+    cut the depth of cgmap, and save 
     """
     cgmapname = str(cgfile)[:-3]
     subprocess.call("zcat %s>%s"%(cgfile, cgmapname), shell=True)
-    cgmap = pd.read_csv(cgmapname, sep='\t',header=None,dtype={0:str}) 
+    cgmap = pd.read_csv(cgmapname, sep='\t',header=None,dtype={0:str},error_bad_lines=False) 
     cgmap_cutoff=cgmap[cgmap[7]>=cutoff]
     if len(cgmap_cutoff)>0:
-    	print "finish depth cutoff"
+    	print "finish cutoff"
     else:
     	print "no file"
     cgmap_cutoff.to_csv("%s.CGmap.gz"%(name),header=False,sep="\t",index=False,compression='gzip')
@@ -64,7 +63,7 @@ def cgmap2bwbz(name,cgfile,cutoff):
     for chr in cgmapc.iloc[:,0].unique():
     	k=cgmapc[cgmapc.iloc[:,0]==chr]
     	maxPos=k.iloc[:,2].max()
-    	bwheader.append((chr,maxPos+100000)) 
+    	bwheader.append((chr,int(maxPos)+100000)) 
     ## open bw file to write
     bw_CG = pyBigWig.open(cgoutfile,"w")
     bw_CG.addHeader(bwheader)
@@ -78,9 +77,12 @@ def cgmap2bwbz(name,cgfile,cutoff):
     	CG = k[(k.iloc[:,3] == 'CG') ]
     	CHG = k[(k.iloc[:,3] == 'CHG')]
     	CHH = k[(k.iloc[:,3] == 'CHH')]
-    	bw_CG.addEntries(chromosome,[x-1 for x in CG.ix[:,2].tolist()],values=[float(f) for f in CG.ix[:,5].tolist()], span=1)
-    	bw_CHG.addEntries(chromosome,[x-1 for x in CHG.ix[:,2].tolist()],values=[float(f) for f in CHG.ix[:,5].tolist()], span=1)
-    	bw_CHH.addEntries(chromosome,[x-1 for x in CHH.ix[:,2].tolist()],values=[float(f) for f in CHH.ix[:,5].tolist()], span=1)
+        try:
+            bw_CG.addEntries(chromosome,[x-1 for x in CG.ix[:,2].tolist()],values=[float(f) for f in CG.ix[:,5].tolist()], span=1)
+            bw_CHG.addEntries(chromosome,[x-1 for x in CHG.ix[:,2].tolist()],values=[float(f) for f in CHG.ix[:,5].tolist()], span=1)
+            bw_CHH.addEntries(chromosome,[x-1 for x in CHH.ix[:,2].tolist()],values=[float(f) for f in CHH.ix[:,5].tolist()], span=1)
+        except:
+            pass
     ##　close and finish the file
     bw_CG.close()
     bw_CHG.close()
@@ -96,12 +98,8 @@ def cgmap2bwbz(name,cgfile,cutoff):
     return cgmap_cutoff,bwall
 
 
-##########     preprocess gene(TE) annotation     ##########
 
 def gtfToGenePred(gtf): 
-    """
-    convert gtf file to genePred file
-    """
     genePred="genePred"
     subprocess.call("gtfToGenePred %s genePred -genePredExt"%(gtf),shell=True)
     return genePred
@@ -109,9 +107,7 @@ def gtfToGenePred(gtf):
 
 
 def AllinfoTE(genePred):
-    """
-    convert TE genepred to TE bed (will put in gb.bed)
-    """
+    #subprocess.call("cat %s|awk \'OFS=\"\t\"{print $12,$1,$2,$3,$4,$5,$5-$4,$8,$9,$10}\'>all_info_annottion"%(genePred),shell=True)
     df_a = pd.read_csv("genePred",sep='\t',header=None)
     gb_bed = df_a[[1,3,4,0,2]]
     fill=np.full((len(gb_bed),1),".")
@@ -122,9 +118,6 @@ def AllinfoTE(genePred):
 
 
 def AllinfoAnnotation(genePred):
-    """
-    convert gene genepred to big bed (having information of gene body, promoter, exon, intron)
-    """
     subprocess.call("cat %s|awk \'OFS=\"\t\"{print $12,$1,$2,$3,$4,$5,$5-$4,$8,$9,$10}\'>all_info_annottion"%(genePred),shell=True)
     df_a=pd.read_csv("all_info_annottion",sep='\t',header=None)
     big_bed = pd.DataFrame()
@@ -132,10 +125,10 @@ def AllinfoAnnotation(genePred):
     for i in range(len(gene_list)):
         gene=df_a[df_a[0]==gene_list[i]] 
         if len(gene)>1:
-            ##choose the longest gene
+            ##can not change, choose the longest gene
             gene=gene.loc[gene[6]==max(gene[6])]
         if len(gene)>1:
-            ##choose the more exons genes
+            ##choose the more exons one
             gene=gene.loc[gene[7]==max(gene[7])]
         onlygene=gene.drop_duplicates(subset=[0], keep='first', inplace=False)
         big_bed=big_bed.append(onlygene) 
@@ -145,10 +138,9 @@ def AllinfoAnnotation(genePred):
     return big_bed
 
 
-
 def Create_gb_bed(big_bed):
     '''
-    save gene body bed
+    gene body bed
     '''
     gb_bed=big_bed[[2,4,5,0,3]]  
     fill=np.full((len(gb_bed),1),".")
@@ -161,19 +153,15 @@ def Create_gb_bed(big_bed):
 
 def Create_pmt_bed():
     '''
-    save PMT bed
+    PMT bed
     '''
     subprocess.call("cat %s|awk \'OFS=\"\t\" {if  ($6==\"+\") print $1,$2-2000,$2,$4,$5,$6 ;else print $1,$3,$3+2000,$4,$5,$6}\'>pmt.bed"%("gb.bed"),shell=True)
     print("save Promoter_Bed")
     pmt_bed=pd.read_csv("pmt.bed",sep="\t",header=None,dtype={0:str})
     return pmt_bed
 
-
  
 def CreateExonIntronBed(big_bed):
-    """
-    save exon and intron bed
-    """
     exon_bed=pd.DataFrame()
     intron_bed=pd.DataFrame()
     exon_list = []
@@ -185,11 +173,10 @@ def CreateExonIntronBed(big_bed):
         exsta[i].pop()
         exend[i]=exend[i].strip().split(",")
         exend[i].pop()
-        # get exons' locations
         for j in range(len(exsta[i])):
+            ##combine exon &intron bed
             exon_row=[big_bed.iloc[i,2],int(exsta[i][j]),int(exend[i][j]),big_bed.iloc[i,0],big_bed.iloc[i,3]] ###chr,sta,end,gene,dir
             exon_list.append(exon_row)
-        # get introns' locations
         for j in range(len(exsta[i])-1):
             intron_row=[big_bed.iloc[i,2],int(exend[i][j]),int(exsta[i][j+1]),big_bed.iloc[i,0],big_bed.iloc[i,3]]
             intron_list.append(intron_row)
@@ -207,44 +194,9 @@ def CreateExonIntronBed(big_bed):
 
 
 
-def gtf2bed(gtf):
-    """
-    the main script for gene annotation preprocess
-    """
-    localtime = time.asctime( time.localtime(time.time()) )
-    genePred=gtfToGenePred(gtf)
-    big_bed=AllinfoAnnotation(genePred) 
-    gb_bed=Create_gb_bed(big_bed) 
-    pmt_bed=Create_pmt_bed() 
-    exon_bed,intron_bed=CreateExonIntronBed(big_bed)
-    localtime = time.asctime( time.localtime(time.time()) )
-    return big_bed, gb_bed, pmt_bed, exon_bed, intron_bed 
-
-
-
-def TEgtf2bed(gtf):
-    """
-    the main script for TE annotation preprocess (in gb.bed), create some empty files to avoid error
-    """
-    genePred=gtfToGenePred(gtf)
-    gb_bed = AllinfoTE(genePred)
-    big_bed = pd.DataFrame()
-    big_bed.to_csv("big.bed")
-    pmt_bed = pd.DataFrame()
-    pmt_bed.to_csv("pmt.bed")
-    exon_bed = pd.DataFrame()
-    exon_bed.to_csv("exon.bed")
-    intron_bed = pd.DataFrame()
-    intron_bed.to_csv("intron.bed") 
-    return big_bed, gb_bed, pmt_bed, exon_bed, intron_bed
-
-
-##########     DNA methylation level in the genomic locations     ###########
+###average meth
 
 def AverageMethGeneBW(bwall,chr,left,right):
-    """
-    the function to average methylaiton level per location (with CG, cHG, CHH)
-    """
     Meth_value_mean={}
     for i in ["CG","CHG","CHH"]:
         bw=bwall["%s"%(i)]
@@ -255,19 +207,16 @@ def AverageMethGeneBW(bwall,chr,left,right):
 
 
 def RunMethGeneBw(bwall,read_bed):
-    """
-    calculate all average methylation in each locations from the bed file 
-    """
     df1 = pd.DataFrame()
     df1_list=[]
     for j in range(len(read_bed)):
         try:
-            Meth_value_mean=AverageMethGeneBW(bwall,str(read_bed.iloc[j,0]),read_bed.iloc[j,1],read_bed.iloc[j,2])
+            Meth_value_mean=AverageMethGeneBW(bwall,read_bed.iloc[j,0],read_bed.iloc[j,1],read_bed.iloc[j,2])
             s1 = list((read_bed.iloc[j,3],Meth_value_mean["CG"],Meth_value_mean["CHG"],Meth_value_mean["CHH"]))
             df1_list.append(s1)
             #print j, s1
         except:
-            #print j  ###they may be Pt, ...
+            #print j  ###there are Pt
             pass
     df1 = df1.append(df1_list, ignore_index=True)
     df1.columns=['gene_ID','Meth_value_mean_CG',"Meth_value_mean_CHG","Meth_value_mean_CHH"]
@@ -275,9 +224,6 @@ def RunMethGeneBw(bwall,read_bed):
 
 
 def AverageMethExonBW(bwall,chr,left,right):
-    """
-    the function to get exon methylation per exon or intron (with CG, cHG, CHH)
-    """
     Meth_value_sum={}
     Exon_cytosine_count = {}
     for i in ["CG","CHG","CHH"]:
@@ -290,13 +236,9 @@ def AverageMethExonBW(bwall,chr,left,right):
 
 
 def RunMethExon(bwall,extron_bed):
-    """
-    acquire exon methylation and intron methylation in each gens from bed
-    """
     extron_bed.columns = ["chr","left","right","gene_ID","RPKM","direction"]
     SumCount = pd.DataFrame()
     row_list = []
-    # the count and methylation level per exons (introns)
     for i in range(len(extron_bed)):
         try:
             Meth_value_sum,Exon_cytosine_count = AverageMethExonBW(bwall,extron_bed.iloc[i,0],extron_bed.iloc[i,1],extron_bed.iloc[i,2])
@@ -308,7 +250,6 @@ def RunMethExon(bwall,extron_bed):
     SumCount.columns = ['gene_ID','sum_CG',"count_CG","sum_CHG","count_CHG","sum_CHH","count_CHH"]
     AverageMethExon = pd.DataFrame()
     mean_list = [] #for final value
-    # the exon (intron) methylation per gene
     for j in SumCount["gene_ID"].unique():
         exons_gene=SumCount.loc[SumCount["gene_ID"]==j] ## choose all exons for that gene
         Meth_value_mean_CG = np.array(float(exons_gene["sum_CG"].sum()))/np.array(exons_gene["count_CG"].sum()) 
@@ -322,53 +263,70 @@ def RunMethExon(bwall,extron_bed):
 
 
 
+
+def gtf2bed(gtf):
+    localtime = time.asctime( time.localtime(time.time()) )
+    genePred=gtfToGenePred(gtf)
+    big_bed=AllinfoAnnotation(genePred) 
+    gb_bed=Create_gb_bed(big_bed) 
+    pmt_bed=Create_pmt_bed() 
+    exon_bed,intron_bed=CreateExonIntronBed(big_bed)
+    localtime = time.asctime( time.localtime(time.time()) )
+    return big_bed, gb_bed, pmt_bed, exon_bed, intron_bed 
+
+
+def TEgtf2bed(gtf):
+    genePred=gtfToGenePred(gtf)
+    gb_bed = AllinfoTE(genePred)
+    big_bed = []
+    pmt_bed = []
+    exon_bed = []
+    intron_bed = []
+    return big_bed, gb_bed, pmt_bed, exon_bed, intron_bed
+
+
+
 def Exp(name, exp):
-    """
-    preprocess expression (just change the name of file)
-    """
     exp=pd.read_csv(exp,sep="\t",names=["gene_ID","RPKM"])
     exp.to_csv("%s_exp.txt"%(name),sep="\t",index=False,header=False)
     return exp
 
 
-
 def WholeProcess(name, cgmap, cutoff, exp, gb_bed, pmt_bed, exon_bed, intron_bed):
-    """
-    the main script for DNA methylation preprocess (contexts (CG, CHG, CHH) and genomic locations (gene body, promoter, exon, and intron))
-    """
     t7 = time.time()
     cgmap_cutoff,bwall=cgmap2bwbz(name,cgmap,cutoff) 
     exp = Exp(name,exp)
     t8 = time.time()
-    print "save bw %s"%HowManyTime(t7,t8)
     GeneMeth=RunMethGeneBw(bwall,gb_bed)
     GeneMeth.to_csv("%s_GeneMean.txt"%(name),sep="\t",index=False,header=False)
-    t9 = time.time()
-    print "save genemean %s"%HowManyTime(t8,t9)
+    print "save genemean"
     try:
+        t9 = time.time()
         PromoterMeth=RunMethGeneBw(bwall,pmt_bed)
         PromoterMeth.to_csv("%s_PromoterMean.txt"%(name),sep="\t",index=False,header=False)
+        print "save PromoterMean"
         t10 = time.time()
-        print "save pmtmean %s"%HowManyTime(t9,t10)
         Exon_meth=RunMethExon(bwall, exon_bed)
         Exon_meth.to_csv("%s_ExonMean.txt"%(name),sep="\t",index=False,header=False) 
+        print "save exon mean"
         t11 = time.time()
-        print "save exonmean %s"%HowManyTime(t10,t11) 
         Intron_meth=RunMethExon(bwall, intron_bed) 
         Intron_meth.to_csv("%s_IntronMean.txt"%(name),sep="\t",index=False,header=False)
         t12 = time.time()
-        print "save intronmean %s"%HowManyTime(t11,t12)
-    except (ValueError), e:
-        print(e)
-        print(traceback.format_exc())
+    except:
         print("TE gtf only process the TE methylation in 'gene body'")
+    print "save intron mean"
+    print "save bw %s"%HowManyTime(t7,t8)
+    print "save genemean %s"%HowManyTime(t8,t9)
+    print "save pmtmean %s"%HowManyTime(t9,t10)
+    print "save exonmean %s"%HowManyTime(t10,t11) 
+    print "save intronmean %s"%HowManyTime(t11,t12)
+
+
 
 
 
 def HowManyTime(tbegin,tend):
-    """
-    to calculate the time to evaluate the speed
-    """
     tTotal=tend-tbegin
     tsec=tTotal%60
     ttolmin=tTotal//60
@@ -379,23 +337,24 @@ def HowManyTime(tbegin,tend):
 
 
 
+
+
 def main():
-    script_start = time.time() # start time
+    script_start = time.time()
     parser = get_parser()
     args = parser.parse_args()
     if args.TE == "False":
-        big_bed, gb_bed, pmt_bed, exon_bed, intron_bed = gtf2bed(args.gtffile) # gene GTF preprocess
+        big_bed, gb_bed, pmt_bed, exon_bed, intron_bed = gtf2bed(args.gtffile)
     if args.TE == "True":
-        big_bed, gb_bed, pmt_bed, exon_bed, intron_bed = TEgtf2bed(args.gtffile) # TE GTF preprocess
+        big_bed, gb_bed, pmt_bed, exon_bed, intron_bed = TEgtf2bed(args.gtffile)
     if args.samplelist == "False":
-        WholeProcess(args.samplename,args.cgmapfilename,args.cutoff, args.expressionfile, gb_bed, pmt_bed, exon_bed, intron_bed) # single methylome preprocess
-    ## preprocess from the info in samplelist
+        WholeProcess(args.samplename,args.cgmapfilename,args.cutoff, args.expressionfile, gb_bed, pmt_bed, exon_bed, intron_bed)
     if args.samplelist != "False":
-        Samplelist=pd.read_csv("%s"%(args.samplelist),header=None,sep="\t") # read the samplelist file
+        Samplelist=pd.read_csv("%s"%(args.samplelist),header=None,sep="\t")
         for i in range(len(Samplelist)):
-            WholeProcess(Samplelist.iloc[i,0],Samplelist.iloc[i,1],args.cutoff, Samplelist.iloc[i,2], gb_bed, pmt_bed, exon_bed, intron_bed) # preprocess each methylome
-    script_end = time.time() # end time
-    print "preprocess time %s"%HowManyTime(script_start,script_end) # total time for preprocessing
+            WholeProcess(Samplelist.iloc[i,0],Samplelist.iloc[i,1],args.cutoff, Samplelist.iloc[i,2], gb_bed, pmt_bed, exon_bed, intron_bed)
+    script_end = time.time()
+    print "preprocess time %s"%HowManyTime(script_start,script_end)
 
 
 
