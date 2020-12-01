@@ -171,7 +171,11 @@ def main():
     for con in meth_con:
         for tar in meth_tar:
             # conduct 'correlation' analyses and generate figures
-            scatterplot(All_value,name,plot=args.plot,context=con,target=tar,corr=args.correlation,threshold=eval(args.threshold),xlimit=eval(args.xlimit),ylimit=eval(args.ylimit),skip0=eval(args.skip0),dotsize=args.dotsize,textsize=args.textsize,ticksize=args.ticksize,labelsize=args.labelsize,titlesize=args.titlesize) 
+            try:
+                scatterplot(All_value,name,plot=args.plot,context=con,target=tar,corr=args.correlation,threshold=eval(args.threshold),xlimit=eval(args.xlimit),ylimit=eval(args.ylimit),skip0=eval(args.skip0),dotsize=args.dotsize,textsize=args.textsize,ticksize=args.ticksize,labelsize=args.labelsize,titlesize=args.titlesize)
+            except:
+                print("The genes with %s methylation in %s could not match gene expression values."%(con,tar))
+                pass
     script_end = time.time() # end time
     print "preprocess time %s"%HowManyTime(script_start,script_end) # total time for analyses
 
