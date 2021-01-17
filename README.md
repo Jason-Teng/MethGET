@@ -74,8 +74,8 @@ Here is the [example data](http://140.109.56.62:8003/Downloadexample) (322MB) to
 >># bismark to CGmap.gz
 >>python methcalls2CGmap.py -n CX_report.txt.gz -f bismark
 >>```
-> 2. Gene Expression File
->> Tab-delimited text ﬁle: contain the gene id and gene expression values.
+> 2. Gene Expression File (no header in the first line)
+>> Tab-delimited text ﬁle: contain the gene id and gene expression values. 
 ```
 AT1G01310       0.152868
 AT1G01320       9.06088
